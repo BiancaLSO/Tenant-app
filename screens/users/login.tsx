@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   title: {
     display: "flex",
     justifyContent: "flex-start",
+    fontWeight: "bold",
     fontSize: 24,
     paddingBottom: 10,
     color: "#101828",
