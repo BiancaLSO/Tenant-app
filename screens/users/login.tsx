@@ -45,16 +45,20 @@ export function Login() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoContainer}>
+      {/* <View style={styles.logoContainer}>
         <Image
           source={require("./assets/adaptive-icon.png")}
           style={styles.logo}
         />
-      </View>
-      {/* <Text style={styles.title}>Welcome back</Text> */}
+      </View> */}
+      <Text style={styles.title}>Log ind</Text>
+      <Text style={styles.paragraph}>
+        Welcome back! Please enter your details.
+      </Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Username</Text>
+        <Text style={styles.label}>Email</Text>
         <TextInput
+          placeholder="Indtast din email adresse"
           style={styles.input}
           onChangeText={setUsername}
           value={username.toLowerCase()}
@@ -63,6 +67,7 @@ export function Login() {
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Password</Text>
         <TextInput
+          placeholder="*******"
           style={styles.input}
           onChangeText={setPassword}
           value={password}
@@ -70,8 +75,12 @@ export function Login() {
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleLoginSuccess}>
-        <Text style={styles.buttonText}>Log In</Text>
+        <Text style={styles.buttonText}>Log ind</Text>
       </TouchableOpacity>
+
+      <View style={styles.rectangle}>
+        <Image source={require("./assets/Rectangle.png")} />
+      </View>
 
       {/* <Text>token is {token}</Text> */}
       <Text>{error}</Text>
@@ -83,12 +92,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   title: {
     display: "flex",
     justifyContent: "flex-start",
-    fontSize: "20rem",
+    fontSize: 24,
+    paddingBottom: 10,
+    color: "#101828",
   },
   logoContainer: {
     position: "absolute",
@@ -108,9 +119,13 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 20,
   },
+  paragraph: {
+    paddingBottom: 30,
+    cololr: "#667085",
+  },
   label: {
     fontSize: 16,
-    fontWeight: "bold",
+    color: "#101828",
     marginBottom: 10,
   },
   input: {
@@ -118,21 +133,28 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 5,
+    borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#B2AC88",
-    borderRadius: 50,
+    backgroundColor: "#101828",
+    borderRadius: 5,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    width: screen.width - 200,
+    width: screen.width - 40,
   },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  rectangle: {
+    position: "absolute",
+    left: "40%",
+    // right: "-10.27%",
+    top: "61%",
+    // bottom: "-14.58%",
   },
 });
