@@ -2,13 +2,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import TabNavigation from "./components/TabNavigation";
+import Profile from "./screens/Profile";
 
 export default function App() {
   return (
     <NavigationContainer>
-      <TabNavigation></TabNavigation>
+      {/* <TabNavigation></TabNavigation> */}
       <View style={styles.container}>
-        <Text>Hello</Text>
+        <Profile />
       </View>
     </NavigationContainer>
   );

@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import Main from "../screens/Main";
+import Profile from "../screens/Profile";
 
 // After we merge, you can add here the screens which
 // will contian stack navigation such as SignUp or LogIn
@@ -28,7 +29,12 @@ export default function StackNavigation() {
       <Stack.Screen
         name="Main"
         component={Main}
-        options={{ title: "Welcome to the main screen" }}
+        options={{ title: "Main screen" }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ title: "Profile" }}
       />
     </Stack.Navigator>
   );
