@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  Button,
   Dimensions,
   TouchableOpacity,
   Image,
@@ -14,6 +13,8 @@ import {
 import { login, updateToken } from "./usersSlice";
 import { UsersEntity } from "./usersEntity";
 import * as SecureStore from "expo-secure-store";
+// var validRegex =
+//   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 export function Login() {
   const token: string | undefined | null = useSelector(
@@ -24,20 +25,28 @@ export function Login() {
   );
   const dispatch = useDispatch<AppDispatch>();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // if (!email) {
+  //   setEmail("Email is required.");
+  // } else if (!email.match(validRegex)) {
+  //   setEmail("Invalid Email");
+  // } else if (!password) {
+  //   setPassword("Password is required.");
+  // }
+  // const [error, setError] = useState("");
 
   const handleLoginSuccess = (event: any) => {
     event.preventDefault();
 
-    dispatch(login(new UsersEntity(username, password)));
+    dispatch(login(new UsersEntity(email, password)));
   };
 
   useEffect(() => {
     const asyncFunc = async () => {
       const token = await SecureStore.getItemAsync("token");
       dispatch(updateToken(token));
-
       console.log("token is", token);
     };
     asyncFunc();
@@ -60,9 +69,10 @@ export function Login() {
         <TextInput
           placeholder="Indtast din email adresse"
           style={styles.input}
-          onChangeText={setUsername}
-          value={username.toLowerCase()}
+          onChangeText={setEmail}
+          value={email.toLowerCase()}
         />
+        {/* <Text style={styles.error}>{error}</Text> */}
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Password</Text>
@@ -122,7 +132,7 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     paddingBottom: 30,
-    cololr: "#667085",
+    color: "#667085",
   },
   label: {
     fontSize: 16,
