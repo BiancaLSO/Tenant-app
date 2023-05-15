@@ -13,6 +13,7 @@ import {
 import { login, updateToken } from "./usersSlice";
 import { UsersEntity } from "./usersEntity";
 import * as SecureStore from "expo-secure-store";
+import { NavigationContainer } from "@react-navigation/native";
 // var validRegex =
 //   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -49,6 +50,7 @@ export function Login() {
       dispatch(updateToken(token));
       console.log("token is", token);
     };
+
     asyncFunc();
   }, []);
 
@@ -103,6 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
+    padding: 16,
   },
   title: {
     display: "flex",

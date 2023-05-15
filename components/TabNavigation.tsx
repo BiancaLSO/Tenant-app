@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Main from "../screens/Main";
 import React, { useState } from "react";
+import { Login } from "../screens/users/login";
 
 export type TabMain = {
   Main: undefined;
@@ -33,6 +34,11 @@ export default function TabNavigation() {
       <Tab.Screen
         name="Main"
         component={Main}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Log in"
+        component={Login}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>
