@@ -4,15 +4,13 @@ import { StyleSheet, Text, View } from "react-native";
 import TabNavigation from "./components/TabNavigation";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import StackNavigation from "./components/StackNavigation";
 
 export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <TabNavigation></TabNavigation>
-        {/* <View style={styles.container}>
-        <Text>Hello</Text>
-      </View> */}
+        <TabNavigation />
       </NavigationContainer>
     </Provider>
   );

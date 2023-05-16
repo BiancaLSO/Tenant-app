@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Main from "../screens/Main";
 import React, { useState } from "react";
 import Info from "../screens/Info";
-import { infoEntity } from "./info/infoEntity";
+import { infoEntity } from "../redux/info/infoEntity";
 
 export type TabMain = {
   Main: undefined;

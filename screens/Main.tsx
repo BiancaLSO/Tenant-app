@@ -1,22 +1,30 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Image } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import Info from "./Info";
 
-export default function Main() {
+type RootStackParamList = {
+  Main: undefined;
+  Info: undefined;
+};
+
+type MainProps = {
+  navigation: NavigationProp<RootStackParamList, "Main">;
+};
+
+export default function Main({ navigation }: MainProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
     console.log("Search for:", searchQuery);
     // add your search logic here
   };
-  // const navigation = useNavigation();
 
-  // const handleNavigate = () => {
-  //   navigation.navigate("Info");
-  // };
+  const handleNavigate = () => {
+    navigation.navigate("Info");
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -33,9 +41,11 @@ export default function Main() {
               <Text style={styles.text1}>Rent has to be paid in</Text>
               <Text style={styles.title1}>7 days</Text>
             </View>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>How to pay</Text>
-            </View>
+            <TouchableOpacity onPress={handleNavigate}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>How to pay</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.rectangleGrey}>
@@ -65,16 +75,18 @@ export default function Main() {
       </ScrollView>
       <View style={styles.shortcutsSection}>
         <Text style={styles.title2}>Shortcuts</Text>
-        <View style={styles.shortcutFlex}>
-          <Image source={require("../assets/Administrativ-hjaelp.png")} style={styles.iconAdm} />
-          <View style={styles.borderBottom}>
-            <View>
-              <Text style={styles.shorcutTitle}>Administrativ help</Text>
-              <Text style={styles.text2}>Permits, Sublets, Termination...</Text>
+        <TouchableOpacity onPress={handleNavigate}>
+          <View style={styles.shortcutFlex}>
+            <Image source={require("../assets/Administrativ-hjaelp.png")} style={styles.iconAdm} />
+            <View style={styles.borderBottom}>
+              <View>
+                <Text style={styles.shorcutTitle}>Administrativ help</Text>
+                <Text style={styles.text2}>Permits, Sublets, Termination...</Text>
+              </View>
+              <Feather name="chevron-right" style={styles.arrowRight} size={30} color="#000" />
             </View>
-            <Feather name="chevron-right" style={styles.arrowRight} size={30} color="#000" />
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.shortcutFlex}>
           <Image source={require("../assets/Beboerservice.png")} style={styles.iconAdm} />
           <View style={styles.borderBottom}>
@@ -100,15 +112,21 @@ export default function Main() {
         <Text style={[styles.title2, styles.helpSection]}>Help Articles</Text>
         <ScrollView showsHorizontalScrollIndicator={false} style={[styles.scrollView, styles.marginBottom]} horizontal={true}>
           <View>
-            <Image source={require("../assets/building.png")} style={styles.helpImg} />
+            <TouchableOpacity onPress={handleNavigate}>
+              <Image source={require("../assets/building.png")} style={styles.helpImg} />
+            </TouchableOpacity>
             <Text style={styles.articleTitle}>Can I rent with a dog?</Text>
           </View>
           <View>
-            <Image source={require("../assets/garden.png")} style={styles.helpImg} />
+            <TouchableOpacity onPress={handleNavigate}>
+              <Image source={require("../assets/garden.png")} style={styles.helpImg} />
+            </TouchableOpacity>
             <Text style={styles.articleTitle}>What common areas do I have?</Text>
           </View>
           <View>
-            <Image source={require("../assets/livingroom.png")} style={[styles.helpImg, styles.marginRight]} />
+            <TouchableOpacity onPress={handleNavigate}>
+              <Image source={require("../assets/livingroom.png")} style={[styles.helpImg, styles.marginRight]} />
+            </TouchableOpacity>
             <Text style={styles.articleTitle}>Community and activities.</Text>
           </View>
         </ScrollView>

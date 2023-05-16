@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import Main from "../screens/Main";
 import Info from "../screens/Info";
+import CreateInfo from "../screens/CreateInfo";
 
 // After we merge, you can add here the screens which
 // will contian stack navigation such as SignUp or LogIn
