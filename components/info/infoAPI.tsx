@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import { infoEntity } from "./infoEntity";
 
 export class InfoAPI {
-  static myIp: string = "10.50.130.29";
+  static myIp: string = "172.20.10.2";
 
   //   in case we decide to be able to create info
   //   static async create(info: infoEntity) {
@@ -18,7 +18,7 @@ export class InfoAPI {
   static async fetchAllInfo() {
     try {
       const result = await axios.get("http://" + this.myIp + ":3000/infos");
-      console.log(result);
+      console.log("result infos" + result);
 
       return result.data;
     } catch (error) {

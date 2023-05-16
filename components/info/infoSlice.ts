@@ -3,7 +3,7 @@ import { InfoAPI } from "./infoAPI";
 import { infoEntity } from "./infoEntity";
 
 export const fetchAllInfo = createAsyncThunk("info/fetchAllInfo", async () => {
-  const response = await InfoAPI.fetchAllInfo();
+  const response = InfoAPI.fetchAllInfo();
   return response;
 });
 
