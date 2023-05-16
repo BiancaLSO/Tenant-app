@@ -6,6 +6,7 @@ import { store } from './store'
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import TabNavigation from "./components/TabNavigation";
+import Profile from "./screens/Profile";
 
 
 // const queryClient = new QueryClient()
@@ -23,9 +24,9 @@ export default function App() {
       // </View>
 
     <NavigationContainer>
-      <TabNavigation></TabNavigation>
+      {/* <TabNavigation></TabNavigation> */}
       <View style={styles.container}>
-        <Text>Hello</Text>
+        <Profile />
       </View>
     </NavigationContainer>
   );
