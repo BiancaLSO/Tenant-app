@@ -4,8 +4,8 @@ import { UsersEntity } from "./usersEntity";
 
 export class UsersAPI {
   static baseUrl: string =
-    Platform.OS === "ios" ? "localhost" : "192.168.168.86";
-  static ip: string = "192.168.168.86";
+    Platform.OS === "ios" ? "localhost" : "194.255.245.201";
+  static ip: string = "194.255.245.201";
 
   static async login(user: UsersEntity) {
     // try {

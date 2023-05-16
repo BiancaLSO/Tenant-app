@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AppDispatch, RootState } from "../../store";
+import { AppDispatch, RootState } from "../store";
 import { useSelector, useDispatch } from "react-redux";
 import {
   View,
@@ -10,8 +10,8 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { login, updateToken } from "./usersSlice";
-import { UsersEntity } from "./usersEntity";
+import { login, updateToken } from "./users/usersSlice";
+import { UsersEntity } from "./users/usersEntity";
 import * as SecureStore from "expo-secure-store";
 // var validRegex =
 //   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -89,7 +89,7 @@ export function Login() {
       </TouchableOpacity>
 
       <View style={styles.rectangle}>
-        <Image source={require("./assets/Rectangle.png")} />
+        <Image source={require("./users/assets/Rectangle.png")} />
       </View>
 
       {/* <Text>token is {token}</Text> */}
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
+    padding: 16,
   },
   title: {
     display: "flex",
