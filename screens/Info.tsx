@@ -1,11 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TextStyle,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { infoEntity } from "../components/info/infoEntity";
 import { fetchAllInfo } from "../components/info/infoSlice";
 import { InfoAPI } from "../components/info/infoAPI";
-import { AnyAction, AsyncThunk, Dispatch, ThunkDispatch } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  AsyncThunk,
+  Dispatch,
+  ThunkDispatch,
+} from "@reduxjs/toolkit";
 import { InfoContext } from "../components/TabNavigation";
 import axios from "axios";
 
@@ -15,7 +27,7 @@ export default function Info() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(fetchAllInfo);
+    dispatch(fetchAllInfo());
   }, []);
   useEffect(() => {
     console.log(info);
@@ -45,7 +57,7 @@ export default function Info() {
     <View>
       <Text>Hello</Text>
 
-      {info.map((item) => (
+      {info?.map((item) => (
         <View key={item.id}>
           <Text>{item.title}</Text>
           <Text>{item.info}</Text>
