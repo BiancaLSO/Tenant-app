@@ -8,6 +8,7 @@ import Info from "./Info";
 type RootStackParamList = {
   Main: undefined;
   Info: undefined;
+  Profile: undefined;
 };
 
 type MainProps = {
@@ -22,8 +23,11 @@ export default function Main({ navigation }: MainProps) {
     // add your search logic here
   };
 
-  const handleNavigate = () => {
+  const handleNavigateInfo = () => {
     navigation.navigate("Info");
+  };
+  const handleNavigateProfile = () => {
+    navigation.navigate("Profile");
   };
   return (
     <ScrollView>
@@ -41,7 +45,7 @@ export default function Main({ navigation }: MainProps) {
               <Text style={styles.text1}>Rent has to be paid in</Text>
               <Text style={styles.title1}>7 days</Text>
             </View>
-            <TouchableOpacity onPress={handleNavigate}>
+            <TouchableOpacity onPress={handleNavigateInfo}>
               <View style={styles.button}>
                 <Text style={styles.buttonText}>How to pay</Text>
               </View>
@@ -75,7 +79,7 @@ export default function Main({ navigation }: MainProps) {
       </ScrollView>
       <View style={styles.shortcutsSection}>
         <Text style={styles.title2}>Shortcuts</Text>
-        <TouchableOpacity onPress={handleNavigate}>
+        <TouchableOpacity onPress={handleNavigateInfo}>
           <View style={styles.shortcutFlex}>
             <Image source={require("../assets/Administrativ-hjaelp.png")} style={styles.iconAdm} />
             <View style={styles.borderBottom}>
@@ -97,34 +101,36 @@ export default function Main({ navigation }: MainProps) {
             <Feather name="chevron-right" style={styles.arrowRight} size={30} color="#000" />
           </View>
         </View>
-        <View style={styles.shortcutFlex}>
-          <Image source={require("../assets/House.png")} style={styles.iconAdm} />
-          <View style={styles.borderBottom}>
-            <View>
-              <Text style={styles.shorcutTitle}>My profile</Text>
-              <Text style={styles.text2}>Personal Info, Apartment Info...</Text>
+        <TouchableOpacity onPress={handleNavigateProfile}>
+          <View style={styles.shortcutFlex}>
+            <Image source={require("../assets/House.png")} style={styles.iconAdm} />
+            <View style={styles.borderBottom}>
+              <View>
+                <Text style={styles.shorcutTitle}>My profile</Text>
+                <Text style={styles.text2}>Personal Info, Apartment Info...</Text>
+              </View>
+              <Feather name="chevron-right" style={styles.arrowRight} size={30} color="#000" />
             </View>
-            <Feather name="chevron-right" style={styles.arrowRight} size={30} color="#000" />
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
       <View>
         <Text style={[styles.title2, styles.helpSection]}>Help Articles</Text>
         <ScrollView showsHorizontalScrollIndicator={false} style={[styles.scrollView, styles.marginBottom]} horizontal={true}>
           <View>
-            <TouchableOpacity onPress={handleNavigate}>
+            <TouchableOpacity onPress={handleNavigateInfo}>
               <Image source={require("../assets/building.png")} style={styles.helpImg} />
             </TouchableOpacity>
             <Text style={styles.articleTitle}>Can I rent with a dog?</Text>
           </View>
           <View>
-            <TouchableOpacity onPress={handleNavigate}>
+            <TouchableOpacity onPress={handleNavigateInfo}>
               <Image source={require("../assets/garden.png")} style={styles.helpImg} />
             </TouchableOpacity>
             <Text style={styles.articleTitle}>What common areas do I have?</Text>
           </View>
           <View>
-            <TouchableOpacity onPress={handleNavigate}>
+            <TouchableOpacity onPress={handleNavigateInfo}>
               <Image source={require("../assets/livingroom.png")} style={[styles.helpImg, styles.marginRight]} />
             </TouchableOpacity>
             <Text style={styles.articleTitle}>Community and activities.</Text>
