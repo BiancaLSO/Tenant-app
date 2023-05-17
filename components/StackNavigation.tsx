@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import Main from "../screens/Main";
 import Info from "../screens/Info";
-import { Login } from "../screens/users/login";
+import { Login } from "../screens/login";
 import Profile from "../screens/Profile";
 
 // After we merge, you can add here the screens which
