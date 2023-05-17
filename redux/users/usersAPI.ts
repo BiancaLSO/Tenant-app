@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Platform } from "react-native";
-import { UsersEntity } from "./usersEntity";
+import { UsersEntity } from "../users/usersEntity";
 
 export class UsersAPI {
   static baseUrl: string =

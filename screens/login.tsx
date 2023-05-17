@@ -13,8 +13,17 @@ import {
 import { login, logout, updateToken } from "../redux/users/usersSlice";
 import { UsersEntity } from "../redux/users/usersEntity";
 import * as SecureStore from "expo-secure-store";
+import { NavigationProp } from "@react-navigation/native";
 
-export function Login() {
+type RootStackParamList = {
+  Main: undefined;
+};
+
+type MainProps = {
+  navigation: NavigationProp<RootStackParamList, "Main">;
+};
+
+export function Login({ navigation }: MainProps) {
   const token: string | undefined | null = useSelector(
     (state: RootState) => state.users.token
   );
@@ -30,6 +39,7 @@ export function Login() {
   const handleLoginSuccess = (event: any) => {
     event.preventDefault();
     dispatch(login(new UsersEntity(email, password)));
+    // navigation.navigate("Main");
   };
 
   const handleLogout = async () => {
