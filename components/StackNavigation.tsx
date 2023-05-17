@@ -4,6 +4,7 @@ import Main from "../screens/Main";
 import Info from "../screens/Info";
 import { Login } from "../screens/users/login";
 import Profile from "../screens/Profile";
+import DrawerNavigation from "./DrawerNavigation";
 
 // After we merge, you can add here the screens which
 // will contian stack navigation such as SignUp or LogIn
@@ -23,7 +24,16 @@ export default function StackNavigation() {
       name="Signup" 
        component={Signup} 
     /> */}
-      <Stack.Screen name="Main" component={Main} />
+      <Stack.Screen
+        name="Menu"
+        component={DrawerNavigation}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Home"
+        component={Main}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Info" component={Info} />
