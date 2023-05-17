@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UsersEntity } from "./usersEntity";
 import * as SecureStore from "expo-secure-store";
 import { UsersAPI } from "../users/usersAPI";
+import { SignUpUser } from "./signupuserEntity";
 
 // First, create the thunk
 export const login = createAsyncThunk(
@@ -17,6 +18,15 @@ export const login = createAsyncThunk(
     return response;
   }
 );
+export const signup = createAsyncThunk(
+  "auth/signup", // This is a name for the thunk (must be unique) not the endpoint
+  async (userSignup: SignUpUser, thunkAPI) => {
+    const response = UsersAPI.signup(userSignup);
+
+    return response;
+  }
+);
+
 interface UsersState {
   token: string | undefined | null;
   error: string | undefined;
@@ -43,6 +53,14 @@ const usersSlice = createSlice({
     // standard reducer logic, with auto-generated action types per reducer
   },
   extraReducers: (builder) => {
+    // Add reducers for additional action types here, and handle loading state as needed
+    builder.addCase(signup.fulfilled, (state, action) => {
+      console.log("running signup fulfilled");
+      state.error = undefined;
+      // if (action.payload.id != undefined) {
+      //   state.error = "Signup success";
+      // }
+    });
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(login.fulfilled, (state, action) => {
       console.log("running login fulfilled");

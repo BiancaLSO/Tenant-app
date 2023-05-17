@@ -10,10 +10,9 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { login, logout, updateToken } from "../redux/users/usersSlice";
-import { UsersEntity } from "../redux/users/usersEntity";
-import * as SecureStore from "expo-secure-store";
+import { signup } from "../redux/users/usersSlice";
 import { NavigationProp } from "@react-navigation/native";
+import { SignUpUser } from "../redux/users/signupuserEntity";
 
 type RootStackParamList = {
   Main: undefined;
@@ -23,10 +22,7 @@ type MainProps = {
   navigation: NavigationProp<RootStackParamList, "Main">;
 };
 
-export function Login({ navigation }: MainProps) {
-  const token: string | undefined | null = useSelector(
-    (state: RootState) => state.users.token
-  );
+export function Signup({ navigation }: MainProps) {
   const error: string | undefined = useSelector(
     (state: RootState) => state.users.error
   );
@@ -35,44 +31,25 @@ export function Login({ navigation }: MainProps) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [role, setRole] = useState("");
 
-  const handleLoginSuccess = (event: any) => {
+  const handleSignup = (event: any) => {
     event.preventDefault();
-    dispatch(login(new UsersEntity(email, password)));
-    navigation.navigate("Main");
+
+    dispatch(
+      signup(new SignUpUser(email, password, firstName, lastName, phone, role))
+    );
   };
-
-  const handleLogout = async () => {
-    await SecureStore.deleteItemAsync("token");
-    dispatch(logout());
-  };
-
-  useEffect(() => {
-    const asyncFunc = async () => {
-      const token = await SecureStore.getItemAsync("token");
-
-      if (token) {
-        console.log("Token exists, logging out");
-        await SecureStore.deleteItemAsync("token");
-        dispatch(logout());
-      } else {
-        dispatch(updateToken(token));
-        console.log("token is", token);
-      }
-    };
-
-    asyncFunc();
-  }, []);
 
   return (
     <View style={styles.container}>
-      {/* {token ? (
-        <Text style={styles.paragraph}>You are logged in.</Text>
-      ) : ( */}
       <>
-        <Text style={styles.title}>Log ind</Text>
+        <Text style={styles.title}>Sign up</Text>
         <Text style={styles.paragraph}>
-          Welcome back! Please enter your details.
+          Welcome! Please enter your details.
         </Text>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Email</Text>
@@ -92,18 +69,47 @@ export function Login({ navigation }: MainProps) {
             value={password}
           />
         </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>First name</Text>
+          <TextInput
+            placeholder="John"
+            style={styles.input}
+            onChangeText={setFirstName}
+            value={firstName}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Last name</Text>
+          <TextInput
+            placeholder="Doe"
+            style={styles.input}
+            onChangeText={setLastName}
+            value={lastName}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Phone</Text>
+          <TextInput
+            placeholder="12345678"
+            style={styles.input}
+            onChangeText={setPhone}
+            value={phone}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Role</Text>
+          <TextInput
+            placeholder="Tenant"
+            style={styles.input}
+            onChangeText={setRole}
+            value={role}
+          />
+        </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleLoginSuccess}>
-          <Text style={styles.buttonText}>Log ind</Text>
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+          <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
       </>
-      {/* )} */}
-
-      {/* {token && (
-        <TouchableOpacity style={styles.button} onPress={handleLogout}>
-          <Text style={styles.buttonText}>Log ud</Text>
-        </TouchableOpacity>
-      )} */}
 
       <View style={styles.rectangle}>
         <Image source={require("../redux/users/assets/Rectangle.png")} />
