@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UsersEntity } from "./usersEntity";
 import * as SecureStore from "expo-secure-store";
-import { UsersAPI } from "./usersAPI";
+import { UsersAPI } from "../users/usersAPI";
 
 // First, create the thunk
 export const login = createAsyncThunk(

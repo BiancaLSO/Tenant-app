@@ -1,5 +1,4 @@
 import { StyleSheet, View } from "react-native";
-import { Login } from "./screens/Login";
 import { Provider } from "react-redux";
 import { store } from "./store";
 // import { QueryClient } from "@tanstack/react-query";

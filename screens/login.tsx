@@ -56,9 +56,8 @@ export function Login({ navigation }: MainProps) {
         await SecureStore.deleteItemAsync("token");
         dispatch(logout());
       } else {
-        console.log("Token is", token);
-        const user = new UsersEntity(email, password);
-        dispatch(login(user));
+        dispatch(updateToken(token));
+        console.log("token is", token);
       }
     };
 
@@ -90,9 +89,11 @@ export function Login({ navigation }: MainProps) {
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleLoginSuccess}>
-        <Text style={styles.buttonText}>Log ind</Text>
-      </TouchableOpacity>
+      {!token && (
+        <TouchableOpacity style={styles.button} onPress={handleLoginSuccess}>
+          <Text style={styles.buttonText}>Log ind</Text>
+        </TouchableOpacity>
+      )}
 
       {token && (
         <TouchableOpacity style={styles.button} onPress={handleLogout}>
