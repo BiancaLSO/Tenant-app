@@ -179,12 +179,6 @@ export default function Main({ navigation }: MainProps) {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleNavigateLogin}>
-          <View>
-            <Text style={styles.shorcutTitle}>Log in</Text>
-            <Text style={styles.text2}>Personal Info, Apartment Info...</Text>
-          </View>
-        </TouchableOpacity>
       </View>
       <View>
         <Text style={[styles.title2, styles.helpSection]}>Help Articles</Text>

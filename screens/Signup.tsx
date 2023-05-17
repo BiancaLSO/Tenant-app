@@ -9,6 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import { signup } from "../redux/users/usersSlice";
 import { NavigationProp } from "@react-navigation/native";
@@ -45,7 +46,7 @@ export function Signup({ navigation }: MainProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <>
         <Text style={styles.title}>Sign up</Text>
         <Text style={styles.paragraph}>
@@ -105,27 +106,26 @@ export function Signup({ navigation }: MainProps) {
             value={role}
           />
         </View>
-
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
       </>
-
-      <View style={styles.rectangle}>
+      {/* <View style={styles.rectangle}>
         <Image source={require("../redux/users/assets/Rectangle.png")} />
-      </View>
-
+      </View> */}
       <Text>{error}</Text>
-    </View>
+    </ScrollView>
   );
 }
 const screen = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-start",
+    // justifyContent: "center",
+    // alignItems: "flex-start",
     padding: 16,
+    paddingBottom: 700, // Adjust this value as needed
+    // marginBottom: 20,
   },
   title: {
     display: "flex",
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   button: {
     backgroundColor: "#101828",
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: screen.width - 40,
+    marginBottom: -300,
   },
   buttonText: {
     color: "#fff",
@@ -188,7 +189,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: "40%",
     // right: "-10.27%",
-    top: "61%",
+    top: "100%",
     // bottom: "-14.58%",
+  },
+  extraSpace: {
+    height: 100,
   },
 });

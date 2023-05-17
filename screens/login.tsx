@@ -39,7 +39,7 @@ export function Login({ navigation }: MainProps) {
   const handleLoginSuccess = (event: any) => {
     event.preventDefault();
     dispatch(login(new UsersEntity(email, password)));
-    navigation.navigate("Main");
+    // navigation.navigate("Main");
   };
 
   const handleLogout = async () => {
@@ -66,44 +66,44 @@ export function Login({ navigation }: MainProps) {
 
   return (
     <View style={styles.container}>
-      {/* {token ? (
+      {token ? (
         <Text style={styles.paragraph}>You are logged in.</Text>
-      ) : ( */}
-      <>
-        <Text style={styles.title}>Log ind</Text>
-        <Text style={styles.paragraph}>
-          Welcome back! Please enter your details.
-        </Text>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            placeholder="Indtast din email adresse"
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email.toLowerCase()}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            placeholder="*******"
-            style={styles.input}
-            onChangeText={setPassword}
-            value={password}
-          />
-        </View>
+      ) : (
+        <>
+          <Text style={styles.title}>Log ind</Text>
+          <Text style={styles.paragraph}>
+            Welcome back! Please enter your details.
+          </Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              placeholder="Indtast din email adresse"
+              style={styles.input}
+              onChangeText={setEmail}
+              value={email.toLowerCase()}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              placeholder="*******"
+              style={styles.input}
+              onChangeText={setPassword}
+              value={password}
+            />
+          </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleLoginSuccess}>
-          <Text style={styles.buttonText}>Log ind</Text>
-        </TouchableOpacity>
-      </>
-      {/* )} */}
+          <TouchableOpacity style={styles.button} onPress={handleLoginSuccess}>
+            <Text style={styles.buttonText}>Log ind</Text>
+          </TouchableOpacity>
+        </>
+      )}
 
-      {/* {token && (
+      {token && (
         <TouchableOpacity style={styles.button} onPress={handleLogout}>
           <Text style={styles.buttonText}>Log ud</Text>
         </TouchableOpacity>
-      )} */}
+      )}
 
       <View style={styles.rectangle}>
         <Image source={require("../redux/users/assets/Rectangle.png")} />
