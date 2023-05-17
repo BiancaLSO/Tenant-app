@@ -46,8 +46,9 @@ export function Login() {
         await SecureStore.deleteItemAsync("token");
         dispatch(logout());
       } else {
-        console.log("Token is null");
-        dispatch(updateToken(token));
+        console.log("Token is", token);
+        const user = new UsersEntity(email, password);
+        dispatch(login(user));
       }
     };
 
