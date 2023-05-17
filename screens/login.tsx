@@ -10,11 +10,9 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { login, updateToken } from "../redux/users/usersSlice";
+import { login, logout, updateToken } from "../redux/users/usersSlice";
 import { UsersEntity } from "../redux/users/usersEntity";
 import * as SecureStore from "expo-secure-store";
-// var validRegex =
-//   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 export function Login() {
   const token: string | undefined | null = useSelector(
@@ -23,43 +21,41 @@ export function Login() {
   const error: string | undefined = useSelector(
     (state: RootState) => state.users.error
   );
+
   const dispatch = useDispatch<AppDispatch>();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // if (!email) {
-  //   setEmail("Email is required.");
-  // } else if (!email.match(validRegex)) {
-  //   setEmail("Invalid Email");
-  // } else if (!password) {
-  //   setPassword("Password is required.");
-  // }
-  // const [error, setError] = useState("");
-
   const handleLoginSuccess = (event: any) => {
     event.preventDefault();
-
     dispatch(login(new UsersEntity(email, password)));
+  };
+
+  const handleLogout = async () => {
+    await SecureStore.deleteItemAsync("token");
+    dispatch(logout());
   };
 
   useEffect(() => {
     const asyncFunc = async () => {
       const token = await SecureStore.getItemAsync("token");
-      dispatch(updateToken(token));
-      console.log("token is", token);
+
+      if (token) {
+        console.log("Token exists, logging out");
+        await SecureStore.deleteItemAsync("token");
+        dispatch(logout());
+      } else {
+        console.log("Token is null");
+        dispatch(updateToken(token));
+      }
     };
+
     asyncFunc();
   }, []);
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.logoContainer}>
-        <Image
-          source={require("./assets/adaptive-icon.png")}
-          style={styles.logo}
-        />
-      </View> */}
       <Text style={styles.title}>Log ind</Text>
       <Text style={styles.paragraph}>
         Welcome back! Please enter your details.
@@ -72,7 +68,6 @@ export function Login() {
           onChangeText={setEmail}
           value={email.toLowerCase()}
         />
-        {/* <Text style={styles.error}>{error}</Text> */}
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Password</Text>
@@ -88,11 +83,15 @@ export function Login() {
         <Text style={styles.buttonText}>Log ind</Text>
       </TouchableOpacity>
 
+      {token && (
+        <TouchableOpacity style={styles.button} onPress={handleLogout}>
+          <Text style={styles.buttonText}>Log ud</Text>
+        </TouchableOpacity>
+      )}
       <View style={styles.rectangle}>
         <Image source={require("../redux/users/assets/Rectangle.png")} />
       </View>
 
-      {/* <Text>token is {token}</Text> */}
       <Text>{error}</Text>
     </View>
   );
@@ -103,6 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
+    padding: 16,
   },
   title: {
     display: "flex",
