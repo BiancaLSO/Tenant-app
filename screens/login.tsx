@@ -45,6 +45,7 @@ export function Login({ navigation }: MainProps) {
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync("token");
     dispatch(logout());
+    console.log("You are logged out");
   };
 
   useEffect(() => {
