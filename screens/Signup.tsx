@@ -64,6 +64,7 @@ export function Signup({ navigation }: MainProps) {
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Password</Text>
           <TextInput
+            secureTextEntry={true}
             placeholder="*******"
             style={styles.input}
             onChangeText={setPassword}
