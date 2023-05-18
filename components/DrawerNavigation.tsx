@@ -3,7 +3,7 @@ import Main from "../screens/Main";
 import Info from "../screens/Info";
 import Profile from "../screens/Profile";
 import StackNavigation from "./StackNavigation";
-import { Login } from "../screens/Login";
+import { Login } from "../screens/login";
 import { Signup } from "../screens/Signup";
 
 const Drawer = createDrawerNavigator();
