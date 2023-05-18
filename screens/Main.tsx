@@ -38,9 +38,7 @@ export default function Main({ navigation }: MainProps) {
   const handleNavigateProfile = () => {
     navigation.navigate("Profile");
   };
-  const handleNavigateLogin = () => {
-    navigation.navigate("Login");
-  };
+
   return (
     <ScrollView>
       <View style={styles.container}>

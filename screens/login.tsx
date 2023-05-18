@@ -16,11 +16,11 @@ import * as SecureStore from "expo-secure-store";
 import { NavigationProp } from "@react-navigation/native";
 
 type RootStackParamList = {
-  Main: undefined;
+  Home: undefined;
 };
 
 type MainProps = {
-  navigation: NavigationProp<RootStackParamList, "Main">;
+  navigation: NavigationProp<RootStackParamList, "Home">;
 };
 
 export function Login({ navigation }: MainProps) {
@@ -39,7 +39,7 @@ export function Login({ navigation }: MainProps) {
   const handleLoginSuccess = (event: any) => {
     event.preventDefault();
     dispatch(login(new UsersEntity(email, password)));
-    // navigation.navigate("Main");
+    navigation.navigate("Home");
   };
 
   const handleLogout = async () => {
