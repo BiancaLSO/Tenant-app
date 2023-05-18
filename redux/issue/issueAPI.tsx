@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Platform } from "react-native";
-import { infoEntity } from "./infoEntity";
+import { IssueEntity } from "./issueEntity";
 import { myIp } from "../../components/consts";
 
-export class InfoAPI {
+export class IssueAPI {
   static myIp: string = myIp;
 
   //   in case we decide to be able to create info
@@ -16,11 +16,20 @@ export class InfoAPI {
   //     } catch (error) {}
   //   }
 
-  static async fetchAllInfo() {
+  static async fetchAllIssues() {
     try {
-      const result = await axios.get("http://" + this.myIp + ":3000/infos");
-      console.log("result infos" + result);
+      const result = await axios.get("http://" + this.myIp + ":3000/issues");
+      console.log("result issues" + result);
 
+      return result.data;
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  static async fetchUserIssues(userId: number) {
+    try {
+      const result = await axios.get("http://" + this.myIp + `:3000/issues/user/issues/userissues?userId=${userId}`);
       return result.data;
     } catch (error) {
       console.log("error", error);

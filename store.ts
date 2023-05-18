@@ -1,11 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import infoReducer from "./redux/info/infoSlice";
 import usersReducer from "./redux/users/usersSlice";
+import categoryReducer from "./redux/category/categorySlice";
+import issueReducer from "./redux/issue/issueSlice";
 
 export const store = configureStore({
   reducer: {
     info: infoReducer,
     users: usersReducer,
+    category: categoryReducer,
+    issue: issueReducer,
   },
 });
 
