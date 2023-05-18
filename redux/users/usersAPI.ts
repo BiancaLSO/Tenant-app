@@ -30,4 +30,18 @@ export class UsersAPI {
 
     return result.data;
   }
+
+  static async fetchUserData(id: number | null, token: string | null) {
+    const url = `http://` + this.ip + `:3000/users/${id}`;
+    try {
+      const result = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return result.data;
+    } catch (error) {
+      console.log("This error is from the UsersAPI " + error);
+    }
+  }
 }

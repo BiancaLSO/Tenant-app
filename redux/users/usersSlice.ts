@@ -23,6 +23,7 @@ export const login = createAsyncThunk(
     return response;
   }
 );
+
 export const signup = createAsyncThunk(
   "auth/signup", // This is a name for the thunk (must be unique) not the endpoint
   async (userSignup: SignUpUser, thunkAPI) => {
@@ -32,14 +33,37 @@ export const signup = createAsyncThunk(
   }
 );
 
+export const fetchUserData = createAsyncThunk(
+  "users/fetchUserData",
+  async () => {
+    try {
+      // Get id from SecureStorage
+      const idString: string | null = await SecureStore.getItemAsync("id");
+      const id: number | null = idString ? JSON.parse(idString) : null;
+
+      // Get token
+      const token: string | null = await SecureStore.getItemAsync("token");
+
+      const response = await UsersAPI.fetchUserData(id, token);
+
+      return response;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      throw error;
+    }
+  }
+);
+
 interface UsersState {
   token: string | undefined | null;
   error: string | undefined;
+  user: UsersEntity | null;
 }
 
 const initialState = {
   token: null,
   error: undefined,
+  user: {} as UsersEntity | null,
 } as UsersState;
 
 // Then, handle actions in your reducers:
@@ -79,6 +103,17 @@ const usersSlice = createSlice({
       }
 
       console.log("error in slice", action.error);
+    });
+    builder.addCase(fetchUserData.fulfilled, (state, action) => {
+      console.log("running fetchUserData fulfilled");
+      state.user = action.payload;
+      state.error = undefined;
+    });
+
+    builder.addCase(fetchUserData.rejected, (state, action) => {
+      console.log("fetchUserData rejected");
+      state.error = "Error fetching user data";
+      state.user = null;
     });
   },
 });
