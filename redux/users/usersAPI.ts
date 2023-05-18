@@ -4,9 +4,8 @@ import { UsersEntity } from "../users/usersEntity";
 import { SignUpUser } from "./signupuserEntity";
 
 export class UsersAPI {
-  static baseUrl: string =
-    Platform.OS === "ios" ? "localhost" : "192.168.1.109";
-  static ip: string = "192.168.1.109";
+  static baseUrl: string = Platform.OS === "ios" ? "localhost" : "192.168.1.9";
+  static ip: string = "192.168.1.9";
 
   static async signup(user: SignUpUser) {
     try {

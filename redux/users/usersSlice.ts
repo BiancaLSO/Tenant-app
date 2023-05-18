@@ -10,10 +10,15 @@ export const login = createAsyncThunk(
   async (user: UsersEntity, thunkAPI) => {
     const response = await UsersAPI.login(user);
 
+    // Parsing number id into string
+    const idString = JSON.stringify(response.id);
+
+    console.log(response.id);
     console.log(response.access_token);
 
     // save to secure store
     SecureStore.setItemAsync("token", response.access_token);
+    SecureStore.setItemAsync("id", idString);
 
     return response;
   }
