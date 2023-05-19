@@ -16,7 +16,6 @@ export const fetchUserIssues = createAsyncThunk("issue/fetchUserIssues", async (
 
 export const createIssue = createAsyncThunk("issue/create", async (issue: IssueEntity, thunkAPI) => {
   const response = IssueAPI.createIssue(issue);
-
   return response;
 });
 

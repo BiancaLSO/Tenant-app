@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity, Dimensions, FlatList, Button } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity, Dimensions, FlatList, Button, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { infoEntity } from "../redux/info/infoEntity";
@@ -7,6 +7,8 @@ import { fetchAllInfo } from "../redux/info/infoSlice";
 import { CategoryEntity } from "../redux/category/categoryEntity";
 import { getCategoryData } from "../components/categoryData";
 import { Picture } from "../components/Picture";
+import { createIssue } from "../redux/issue/issueSlice";
+import { IssueEntity } from "../redux/issue/issueEntity";
 
 interface ChipProps {
   label: string;
@@ -21,11 +23,15 @@ const Chip: React.FC<ChipProps> = ({ label, onPress, selected }) => (
 );
 
 export default function CreateIssue() {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
   const selectedCategory: CategoryEntity | null = useSelector((state: RootState) => state.category.selectedCategory);
 
+  const scrollViewRef = useRef<ScrollView>(null);
   const [camera, setCamera] = useState(false);
   const [photoToDisplay, setPhotoToDisplay] = useState("");
 
@@ -39,62 +45,66 @@ export default function CreateIssue() {
       setSubject(chip);
     }
   };
+  const handleOpenCamera = (boolean: boolean) => {
+    setCamera(boolean);
+    if (boolean === true) {
+      scrollViewRef.current?.scrollTo({ y: 2000, animated: true });
+    } else {
+      scrollViewRef.current?.scrollTo({ y: 10, animated: true });
+    }
+  };
 
-  //   const userIssues: IssueEntity[] = useSelector((state: RootState) => state.issue.userIssues);
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
 
-  //   const dispatch = useDispatch<AppDispatch>();
+    const response = await dispatch(createIssue(new IssueEntity(subject, description, photoToDisplay)));
 
-  //   useEffect(() => {
-  //     dispatch(fetchAllCategories());
-  //     dispatch(fetchUserIssues());
-  //   }, []);
-  //   useEffect(() => {
-  //     console.log(userIssues);
-  //   }, [userIssues]);
+    if (response) {
+      setImageUrl(response.payload.imageUrl);
+    }
+  };
 
   return (
-    <ScrollView style={styles.rootContainer}>
-      <View style={styles.container}>
-        <View style={styles.header}>
+    <View style={styles.rootContainer}>
+      <ScrollView ref={scrollViewRef}>
+        <View style={[styles.header, styles.container]}>
           <Text style={styles.h1}>Create your issue</Text>
           <View style={styles.catLabel}>
             <Text style={{ fontSize: 20, textAlign: "center" }}>{selectedCategory?.name}</Text>
           </View>
           <Text style={styles.text}>Tell us what is wrong. Once you have created the case, it will be sent and you will be contacted through email as soon as possible.</Text>
         </View>
-      </View>
-      <View style={styles.container}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Subject</Text>
-          <TextInput placeholder="Insert the subject" style={styles.input} onChangeText={setSubject} value={subject} />
-          <FlatList
-            data={data} // Replace with your actual data
-            keyExtractor={(item) => item}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => <Chip label={item} onPress={() => handleChipPress(item)} selected={selectedChips.includes(item)} />}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Description</Text>
+        <View style={styles.container}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Subject</Text>
+            <TextInput placeholder="Insert the subject" style={styles.input} onChangeText={setSubject} value={subject} />
+            <FlatList data={data} keyExtractor={(item) => item} horizontal showsHorizontalScrollIndicator={false} renderItem={({ item }) => <Chip label={item} onPress={() => handleChipPress(item)} selected={selectedChips.includes(item)} />} />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Description</Text>
 
-          <TextInput style={styles.textArea} multiline numberOfLines={6} placeholder="Describe your issue as detailed as possible." value={description} onChangeText={setDescription} />
+            <TextInput style={styles.textArea} multiline numberOfLines={6} placeholder="Describe your issue as detailed as possible." value={description} onChangeText={setDescription} />
+          </View>
+          <View style={[styles.cameraContainer, { height: camera ? 650 : 100 }]}>
+            {camera ? (
+              <TouchableOpacity onPress={() => handleOpenCamera(false)} style={styles.button}>
+                <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Hide camera</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => handleOpenCamera(true)} style={styles.button}>
+                <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Open camera</Text>
+              </TouchableOpacity>
+            )}
+            {camera ? <Picture setCamera={setCamera} setPhotoToDisplay={setPhotoToDisplay}></Picture> : <></>}
+          </View>
+          {photoToDisplay && imageUrl ? <Image source={{ uri: imageUrl }} style={styles.uploadedImage} /> : null}
         </View>
-        <View style={styles.cameraContainer}>
-          {camera ? (
-            <View style={styles.button}>
-              <Button color={"black"} title="Hide camera" onPress={() => setCamera(false)} />
-            </View>
-          ) : (
-            <View style={styles.button}>
-              <Button color={"black"} title="Open camera" onPress={() => setCamera(true)} />
-            </View>
-          )}
 
-          {camera ? <Picture setCamera={setCamera} setPhotoToDisplay={setPhotoToDisplay}></Picture> : <></>}
-        </View>
-      </View>
-    </ScrollView>
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Create issue</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   );
 }
 const screen = Dimensions.get("window");
@@ -105,6 +115,7 @@ const styles = StyleSheet.create({
   },
   container: {
     marginHorizontal: 25,
+    paddingBottom: 50,
   },
   header: {
     paddingVertical: 20,
@@ -208,14 +219,20 @@ const styles = StyleSheet.create({
   cameraContainer: {
     flex: 1,
     marginBottom: 50,
+    height: 650,
   },
   button: {
     color: "#0B1F2F",
-    fontWeight: "700",
     backgroundColor: "#A5ED7B",
     width: "40%",
-    padding: 4,
+    padding: 10,
     marginVertical: 10,
     borderRadius: 10,
+  },
+  uploadedImage: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+    resizeMode: "contain",
   },
 });
