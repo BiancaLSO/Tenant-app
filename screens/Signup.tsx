@@ -39,16 +39,28 @@ export function Signup({ navigation }: MainProps) {
   const [phone, setPhone] = useState("");
   const [roleTenant, setRoleTenant] = useState("Tenant");
   const [roleBoard, setRoleBoard] = useState("Admin");
+  const [errors, setErrors] = useState("");
 
-  const handleSignupTenant = (event: any) => {
+  const handleSignupTenant = async (event: any) => {
     event.preventDefault();
-
-    dispatch(
+    if (!email || !password || !firstName || !lastName || !roleTenant) {
+      setErrors("Please fill in all fields."); // Set the error message
+      return; // Return early to prevent submission
+    }
+    const success = await dispatch(
       signupTenant(
         new SignUpUser(email, password, firstName, lastName, phone, roleTenant)
       )
     );
-    navigation.navigate("Login");
+
+    if (success) {
+      navigation.navigate("Login");
+    } else {
+      // Handle unsuccessful sign-up
+      // For example, display an error message
+      setErrors("Sign-up failed. Please try again.");
+      console.log("Sign-up failed");
+    }
   };
 
   const handleSignupBoard = (event: any) => {
@@ -249,7 +261,7 @@ export function Signup({ navigation }: MainProps) {
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
         </>
-        <Text>{error}</Text>
+        {error && <Text>{error}</Text>}
       </ScrollView>
     );
   }

@@ -67,6 +67,7 @@ const usersSlice = createSlice({
       console.log("running signup fulfilled");
       state.error = undefined;
     });
+
     builder.addCase(signupBoard.fulfilled, (state) => {
       console.log("running signup fulfilled");
       state.error = undefined;
@@ -80,6 +81,22 @@ const usersSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       if (action.error.message === "Request failed with status code 401") {
         state.error = "Invalid login";
+        state.token = null;
+      }
+
+      console.log("error in slice", action.error);
+    });
+    builder.addCase(signupTenant.rejected, (state, action) => {
+      if (action.error.message === "Request failed with status code 401") {
+        state.error = "Invalid signup";
+        state.token = null;
+      }
+      console.log("error in slice", action.error);
+    });
+
+    builder.addCase(signupBoard.rejected, (state, action) => {
+      if (action.error.message === "Request failed with status code 401") {
+        state.error = "Invalid signup";
         state.token = null;
       }
 
