@@ -5,15 +5,26 @@ import { AppDispatch, RootState } from "../store";
 import { infoEntity } from "../redux/info/infoEntity";
 import { fetchAllInfo } from "../redux/info/infoSlice";
 import { CategoryEntity } from "../redux/category/categoryEntity";
-import { fetchAllCategories } from "../redux/category/categorySlice";
+import { fetchAllCategories, setSelectedCategory } from "../redux/category/categorySlice";
 import { IssueEntity } from "../redux/issue/issueEntity";
 import { fetchUserIssues } from "../redux/issue/issueSlice";
+import { NavigationProp } from "@react-navigation/native";
 
-export default function CreateIssue() {
+type RootStackParamList = {
+  ChooseCategory: undefined;
+  CreateIssue: undefined;
+};
+
+type MainProps = {
+  navigation: NavigationProp<RootStackParamList, "ChooseCategory">;
+};
+
+export default function ChooseCategory({ navigation }: MainProps) {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const categories: CategoryEntity[] = useSelector((state: RootState) => state.category.categories);
   const userIssues: IssueEntity[] = useSelector((state: RootState) => state.issue.userIssues);
+  const selectedCategory: CategoryEntity | null = useSelector((state: RootState) => state.category.selectedCategory);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -25,14 +36,24 @@ export default function CreateIssue() {
     console.log(userIssues);
   }, [userIssues]);
 
+  const handleChooseCategory = (category: CategoryEntity) => {
+    dispatch(setSelectedCategory(category));
+    if (category) {
+      navigation.navigate("CreateIssue");
+    }
+  };
+  useEffect(() => {
+    console.log(selectedCategory);
+  }, [selectedCategory]);
+
   const renderContent = () => {
     if (selectedTabIndex === 0) {
       return (
         <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", marginVertical: 10 }}>
           {categories?.map((category) => (
-            <View key={category.id} style={styles.categoryItem}>
+            <TouchableOpacity key={category.id} style={styles.categoryItem} onPress={() => handleChooseCategory(category)}>
               <Text style={styles.categoryButton}>{category.name}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       );
@@ -68,7 +89,7 @@ export default function CreateIssue() {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setSelectedTabIndex(1)}>
             <View style={[styles.tabButton, selectedTabIndex === 1 && styles.tabButtonSelected]}>
-              <Text>My issues (3)</Text>
+              <Text>My issues ({userIssues.length})</Text>
             </View>
           </TouchableOpacity>
         </View>

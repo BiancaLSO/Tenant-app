@@ -14,6 +14,12 @@ export const fetchUserIssues = createAsyncThunk("issue/fetchUserIssues", async (
   return response;
 });
 
+export const createIssue = createAsyncThunk("issue/create", async (issue: IssueEntity, thunkAPI) => {
+  const response = IssueAPI.createIssue(issue);
+
+  return response;
+});
+
 interface issueState {
   issues: IssueEntity[];
   userIssues: IssueEntity[];
@@ -34,6 +40,9 @@ const issueSlice = createSlice({
     });
     builder.addCase(fetchUserIssues.fulfilled, (state, action) => {
       state.userIssues = action.payload;
+    });
+    builder.addCase(createIssue.fulfilled, (state, action) => {
+      state.issues.push(action.payload);
     });
   },
 });

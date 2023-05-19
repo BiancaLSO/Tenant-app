@@ -10,21 +10,27 @@ export const fetchAllCategories = createAsyncThunk("category/fetchAllCategories"
 
 interface categoryState {
   categories: CategoryEntity[];
+  selectedCategory: CategoryEntity | null;
 }
 
 const initialState: categoryState = {
   categories: [],
+  selectedCategory: null,
 };
 
 const categorySlice = createSlice({
   name: "category",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedCategory: (state, action: PayloadAction<CategoryEntity>) => {
+      state.selectedCategory = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAllCategories.fulfilled, (state, action) => {
       state.categories = action.payload;
     });
   },
 });
-
+export const { setSelectedCategory } = categorySlice.actions;
 export default categorySlice.reducer;

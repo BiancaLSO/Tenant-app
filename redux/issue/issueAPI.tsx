@@ -6,15 +6,14 @@ import { myIp } from "../../components/consts";
 export class IssueAPI {
   static myIp: string = myIp;
 
-  //   in case we decide to be able to create info
-  //   static async create(info: infoEntity) {
-  //     try {
-  //       console.log("receiving info", info);
+  static async createIssue(issue: IssueEntity) {
+    try {
+      console.log("sending data", issue);
 
-  //       const result = await axios.post("http://" + this.myIp + ":3000/infos", { data: info, headers: { "Content-Type": "multipart/form-data" } });
-  //       return result.data;
-  //     } catch (error) {}
-  //   }
+      const result = await axios.post("http://" + this.myIp + ":3003/issues", { data: issue, headers: { "Content-Type": "multipart/form-data" } });
+      return result.data;
+    } catch (error) {}
+  }
 
   static async fetchAllIssues() {
     try {

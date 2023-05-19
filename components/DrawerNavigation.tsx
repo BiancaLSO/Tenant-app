@@ -5,7 +5,8 @@ import Profile from "../screens/Profile";
 import StackNavigation from "./StackNavigation";
 import { Login } from "../screens/login";
 import { Signup } from "../screens/Signup";
-import CreateIssue from "../screens/CreatIssue";
+import CreateIssue from "../screens/ChooseCategory";
+import ChooseCategory from "../screens/ChooseCategory";
 
 const Drawer = createDrawerNavigator();
 
@@ -17,7 +18,7 @@ export default function DrawerNavigation() {
       <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="Log in" component={Login} />
       <Drawer.Screen name="Sign up" component={Signup} />
-      <Drawer.Screen name="Add an issue" component={CreateIssue} />
+      <Drawer.Screen name="Add an issue" component={ChooseCategory} />
     </Drawer.Navigator>
   );
 }
