@@ -18,10 +18,19 @@ export const login = createAsyncThunk(
     return response;
   }
 );
-export const signup = createAsyncThunk(
-  "auth/signup", // This is a name for the thunk (must be unique) not the endpoint
-  async (userSignup: SignUpUser, thunkAPI) => {
-    const response = UsersAPI.signup(userSignup);
+export const signupTenant = createAsyncThunk(
+  "auth/signupTenant", // This is a name for the thunk (must be unique) not the endpoint
+  async (userSignup: SignUpUser) => {
+    const response = UsersAPI.signupTenant(userSignup);
+
+    return response;
+  }
+);
+
+export const signupBoard = createAsyncThunk(
+  "auth/signupBoard", // This is a name for the thunk (must be unique) not the endpoint
+  async (userSignup: SignUpUser) => {
+    const response = UsersAPI.signupBoard(userSignup);
 
     return response;
   }
@@ -54,7 +63,11 @@ const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(signup.fulfilled, (state) => {
+    builder.addCase(signupTenant.fulfilled, (state) => {
+      console.log("running signup fulfilled");
+      state.error = undefined;
+    });
+    builder.addCase(signupBoard.fulfilled, (state) => {
       console.log("running signup fulfilled");
       state.error = undefined;
     });

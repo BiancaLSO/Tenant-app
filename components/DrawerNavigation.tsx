@@ -14,7 +14,7 @@ export default function DrawerNavigation() {
       <Drawer.Screen name="Home" component={Main} />
       <Drawer.Screen name="More Information" component={Info} />
       <Drawer.Screen name="Profile" component={Profile} />
-      <Drawer.Screen name="Log in" component={Login} />
+      <Drawer.Screen name="Login" component={Login} />
       <Drawer.Screen name="Sign up" component={Signup} />
     </Drawer.Navigator>
   );
