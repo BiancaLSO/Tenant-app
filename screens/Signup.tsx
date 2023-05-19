@@ -54,6 +54,7 @@ export function Signup({ navigation }: MainProps) {
     );
 
     if (success) {
+      setErrors("");
       navigation.navigate("Login");
     } else {
       // Handle unsuccessful sign-up
@@ -181,7 +182,8 @@ export function Signup({ navigation }: MainProps) {
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
         </>
-        <Text>{error}</Text>
+
+        {errors && <Text style={styles.error}>{errors}</Text>}
       </ScrollView>
     );
   }
@@ -387,5 +389,10 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     tintColor: "white",
+  },
+  error: {
+    color: "red",
+    fontWeight: "900",
+    textAlign: "center",
   },
 });
