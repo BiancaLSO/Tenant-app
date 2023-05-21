@@ -39,14 +39,62 @@ export function Signup({ navigation }: MainProps) {
   const [phone, setPhone] = useState("");
   const [roleTenant, setRoleTenant] = useState("Tenant");
   const [roleBoard, setRoleBoard] = useState("Admin");
+
+  // validation
   const [errors, setErrors] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+
+  const validateForm = () => {
+    if (
+      !email ||
+      (!password && password.length > 4) ||
+      !firstName ||
+      !lastName ||
+      !phone
+    ) {
+      setEmailError("Email is required.");
+      setPasswordError("Please enter a password with at least 4 characters.");
+      setFirstNameError("First name is required.");
+      setLastNameError("Last name is required.");
+      setPhoneError("Phone number is required.");
+      return false;
+    }
+
+    if (!email.includes("@")) {
+      setEmailError("Invalid email format.");
+      return false;
+    }
+
+    if (!password || password.length < 4) {
+      setPasswordError("Please enter a password with at least 4 characters.");
+      return;
+    }
+
+    // Validation successful
+    return true;
+  };
+
+  const clearFieldErrors = () => {
+    setEmailError("");
+    setPasswordError("");
+    setFirstNameError("");
+    setLastNameError("");
+    setPhoneError("");
+  };
+
+  // validation end
 
   const handleSignupTenant = async (event: any) => {
     event.preventDefault();
-    if (!email || !password || !firstName || !lastName || !roleTenant) {
-      setErrors("Please fill in all fields."); // Set the error message
-      return; // Return early to prevent submission
+
+    if (!validateForm()) {
+      return; // Exit if form validation fails
     }
+
     const success = await dispatch(
       signupTenant(
         new SignUpUser(email, password, firstName, lastName, phone, roleTenant)
@@ -54,25 +102,32 @@ export function Signup({ navigation }: MainProps) {
     );
 
     if (success) {
-      setErrors("");
+      clearFieldErrors();
       navigation.navigate("Login");
     } else {
-      // Handle unsuccessful sign-up
-      // For example, display an error message
       setErrors("Sign-up failed. Please try again.");
       console.log("Sign-up failed");
     }
   };
 
-  const handleSignupBoard = (event: any) => {
+  const handleSignupBoard = async (event: any) => {
     event.preventDefault();
-
-    dispatch(
+    if (!validateForm()) {
+      return; // Exit if form validation fails
+    }
+    const success = await dispatch(
       signupBoard(
         new SignUpUser(email, password, firstName, lastName, phone, roleBoard)
       )
     );
-    navigation.navigate("Login");
+
+    if (success) {
+      clearFieldErrors();
+      navigation.navigate("Login");
+    } else {
+      setErrors("Sign-up failed. Please try again.");
+      console.log("Sign-up failed");
+    }
   };
   const handleYesClick = () => {
     setShowFormTenant(true);
@@ -127,9 +182,15 @@ export function Signup({ navigation }: MainProps) {
             <TextInput
               placeholder="Indtast din email adresse"
               style={styles.input}
-              onChangeText={setEmail}
+              onChangeText={(text) => {
+                setEmail(text);
+                setEmailError(""); // Clear email error when typing
+              }}
               value={email.toLowerCase()}
             />
+            {emailError !== "" && (
+              <Text style={styles.error}>{emailError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Password</Text>
@@ -137,36 +198,60 @@ export function Signup({ navigation }: MainProps) {
               secureTextEntry={true}
               placeholder="*******"
               style={styles.input}
-              onChangeText={setPassword}
+              onChangeText={(text) => {
+                setPassword(text);
+                setPasswordError(""); // Clear email error when typing
+              }}
               value={password}
             />
+            {passwordError !== "" && (
+              <Text style={styles.error}>{passwordError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>First name</Text>
             <TextInput
               placeholder="John"
               style={styles.input}
-              onChangeText={setFirstName}
+              onChangeText={(text) => {
+                setFirstName(text);
+                setFirstNameError(""); // Clear email error when typing
+              }}
               value={firstName}
             />
+            {firstNameError !== "" && (
+              <Text style={styles.error}>{firstNameError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Last name</Text>
             <TextInput
               placeholder="Doe"
               style={styles.input}
-              onChangeText={setLastName}
+              onChangeText={(text) => {
+                setLastName(text);
+                setLastNameError(""); // Clear email error when typing
+              }}
               value={lastName}
             />
+            {lastNameError !== "" && (
+              <Text style={styles.error}>{lastNameError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Phone</Text>
             <TextInput
               placeholder="12345678"
               style={styles.input}
-              onChangeText={setPhone}
+              onChangeText={(text) => {
+                setPhone(text);
+                setPhoneError(""); // Clear email error when typing
+              }}
               value={phone}
             />
+            {phoneError !== "" && (
+              <Text style={styles.error}>{phoneError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Role</Text>
@@ -208,9 +293,15 @@ export function Signup({ navigation }: MainProps) {
             <TextInput
               placeholder="Indtast din email adresse"
               style={styles.input}
-              onChangeText={setEmail}
+              onChangeText={(text) => {
+                setEmail(text);
+                setEmailError(""); // Clear email error when typing
+              }}
               value={email.toLowerCase()}
             />
+            {emailError !== "" && (
+              <Text style={styles.error}>{emailError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Password</Text>
@@ -218,36 +309,60 @@ export function Signup({ navigation }: MainProps) {
               secureTextEntry={true}
               placeholder="*******"
               style={styles.input}
-              onChangeText={setPassword}
+              onChangeText={(text) => {
+                setPassword(text);
+                setPasswordError(""); // Clear email error when typing
+              }}
               value={password}
             />
+            {passwordError !== "" && (
+              <Text style={styles.error}>{passwordError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>First name</Text>
             <TextInput
               placeholder="John"
               style={styles.input}
-              onChangeText={setFirstName}
+              onChangeText={(text) => {
+                setFirstName(text);
+                setFirstNameError(""); // Clear email error when typing
+              }}
               value={firstName}
             />
+            {firstNameError !== "" && (
+              <Text style={styles.error}>{firstNameError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Last name</Text>
             <TextInput
               placeholder="Doe"
               style={styles.input}
-              onChangeText={setLastName}
+              onChangeText={(text) => {
+                setLastName(text);
+                setLastNameError(""); // Clear email error when typing
+              }}
               value={lastName}
             />
+            {lastNameError !== "" && (
+              <Text style={styles.error}>{lastNameError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Phone</Text>
             <TextInput
               placeholder="12345678"
               style={styles.input}
-              onChangeText={setPhone}
+              onChangeText={(text) => {
+                setPhone(text);
+                setPhoneError(""); // Clear email error when typing
+              }}
               value={phone}
             />
+            {phoneError !== "" && (
+              <Text style={styles.error}>{phoneError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Role</Text>
@@ -393,6 +508,6 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     fontWeight: "900",
-    textAlign: "center",
+    textAlign: "left",
   },
 });
