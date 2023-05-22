@@ -10,6 +10,7 @@ type RootStackParamList = {
   Info: undefined;
   Profile: undefined;
   Login: undefined;
+  Confirmation: undefined;
 };
 
 type MainProps = {

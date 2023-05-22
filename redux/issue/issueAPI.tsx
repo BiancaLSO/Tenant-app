@@ -8,8 +8,6 @@ export class IssueAPI {
 
   static async createIssue(issue: IssueEntity) {
     try {
-      console.log("sending data", issue);
-
       const result = await axios.post("http://" + this.myIp + ":3000/issues", { data: issue, headers: { "Content-Type": "multipart/form-data" } });
       return result.data;
     } catch (error) {}

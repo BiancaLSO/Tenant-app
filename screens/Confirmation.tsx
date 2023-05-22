@@ -1,34 +1,45 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
-import { infoEntity } from "../redux/info/infoEntity";
-import { fetchAllInfo } from "../redux/info/infoSlice";
-import { CategoryEntity } from "../redux/category/categoryEntity";
-import { fetchAllCategories } from "../redux/category/categorySlice";
-import { IssueEntity } from "../redux/issue/issueEntity";
-import { fetchUserIssues } from "../redux/issue/issueSlice";
+import { View, Text, StyleSheet, ScrollView, Image, TextInput, TextStyle, TouchableOpacity } from "react-native";
+import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 
-export default function Confirmation() {
-  //   const categories: CategoryEntity[] = useSelector((state: RootState) => state.category.categories);
-  //   const userIssues: IssueEntity[] = useSelector((state: RootState) => state.issue.userIssues);
+type RootStackParamList = {
+  Home: undefined;
+  Confirmation: { photoToDisplay?: string; imageUrl?: string; subject: string; description: string; issueId: number };
+};
 
-  //   const dispatch = useDispatch<AppDispatch>();
+type ConfirmationScreenRouteProp = RouteProp<RootStackParamList, "Confirmation">;
+type MainProps = {
+  navigation: NavigationProp<RootStackParamList, "Confirmation">;
+};
 
-  //   useEffect(() => {
-  //     dispatch(fetchAllCategories());
-  //     dispatch(fetchUserIssues());
-  //   }, []);
-  //   useEffect(() => {
-  //     console.log(userIssues);
-  //   }, [userIssues]);
-
+export default function Confirmation({ navigation }: MainProps) {
+  const route = useRoute<ConfirmationScreenRouteProp>();
+  const { photoToDisplay, imageUrl, subject, description, issueId } = route.params;
+  console.log(imageUrl);
+  const handleNavigate = () => {
+    navigation.navigate("Home");
+  };
   return (
     <ScrollView style={styles.rootContainer}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.h1}>Confirmation</Text>
-          <Text style={styles.text}>You have succesfully submitted you issue. We will get back at you</Text>
+          <Text style={styles.text}>You have succesfully submitted you issue. We will get back at you through an email as soon as possible</Text>
+          <Text style={styles.h2}>Issue number {issueId} </Text>
+          <Text style={styles.h2}>Subject of you issue: </Text>
+          <Text style={styles.text}>{subject}</Text>
+          <Text style={styles.h2}>Description of your issue:</Text>
+          <Text style={styles.text}>{description}</Text>
+
+          {photoToDisplay && imageUrl ? (
+            <>
+              <Text style={styles.h2}>Picture:</Text>
+              <Image source={{ uri: imageUrl }} style={styles.uploadedImage} />
+            </>
+          ) : null}
+          <TouchableOpacity onPress={handleNavigate} style={styles.button}>
+            <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Home</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -41,6 +52,7 @@ const styles = StyleSheet.create({
   },
   container: {
     marginHorizontal: 25,
+    display: "flex",
   },
   header: {
     paddingVertical: 20,
@@ -61,33 +73,20 @@ const styles = StyleSheet.create({
     color: "#0B1F2F",
     fontSize: 17,
   },
-  tabsHeader: {
-    marginHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#0B1F2F",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
+
+  uploadedImage: {
+    width: 300,
+    height: 600,
+    marginBottom: 20,
+    resizeMode: "contain",
+    alignSelf: "center",
   },
-  tabButton: {
-    padding: 15,
-  },
-  tabButtonSelected: {
-    borderBottomWidth: 5,
-    borderBottomColor: "#A5ED7B",
-  },
-  categoryItem: {
-    backgroundColor: "#F2F4F7",
-    margin: 5,
-    flexBasis: "40%",
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 40,
-  },
-  categoryButton: {
+  button: {
     color: "#0B1F2F",
-    fontSize: 20,
-    fontWeight: "500",
+    backgroundColor: "#A5ED7B",
+    width: "40%",
+    padding: 10,
+    marginVertical: 10,
+    borderRadius: 10,
   },
 });

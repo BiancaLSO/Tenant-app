@@ -22,17 +22,23 @@ export const createIssue = createAsyncThunk("issue/create", async (issue: IssueE
 interface issueState {
   issues: IssueEntity[];
   userIssues: IssueEntity[];
+  photoToDisplay: any | null;
 }
 
 const initialState: issueState = {
   issues: [],
   userIssues: [],
+  photoToDisplay: null,
 };
 
 const issueSlice = createSlice({
   name: "issue",
   initialState,
-  reducers: {},
+  reducers: {
+    setPhotoToDisplay: (state, action: PayloadAction<any>) => {
+      state.photoToDisplay = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAllIssues.fulfilled, (state, action) => {
       state.issues = action.payload;

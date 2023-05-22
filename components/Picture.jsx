@@ -27,25 +27,9 @@ export function Picture(props) {
     return <Text>Permission for camera not granted. Please change this in settings.</Text>;
   }
 
-  const uploadImage = async (newPhoto) => {
-    const fileToUpload = newPhoto.base64;
-    const data = new FormData();
-    data.append("file", fileToUpload);
-    try {
-      // get ip on mac: ipconfig getifaddr en0
-      const yourIP = "192.168.0.105";
-      let res = await fetch("http://" + yourIP + ":3003/problems/image", {
-        method: "POST",
-        body: data,
-        headers: {
-          "Content-Type": "multipart/form-data; ",
-        },
-      });
-      let responseJson = await res.json();
-      console.log(responseJson);
-    } catch (error) {
-      // console.log("error", error)
-    }
+  const extractFilename = (uri) => {
+    const parts = uri.split("/");
+    return parts[parts.length - 1];
   };
 
   let takePic = async () => {
@@ -58,6 +42,7 @@ export function Picture(props) {
     let newPhoto = await cameraRef.current.takePictureAsync(options);
     props.setPhotoToDisplay(newPhoto);
     setPhoto(newPhoto);
+    props.handlePhotoName(extractFilename(newPhoto.uri));
   };
 
   if (photo) {
@@ -71,8 +56,7 @@ export function Picture(props) {
     return (
       <SafeAreaView style={styles.container}>
         <Image style={styles.preview} source={{ uri: "data:image/jpg;base64," + photo.base64 }}></Image>
-
-        {hasMediaLibraryPermission ? <Button title="Save" onPress={savePhoto} /> : undefined}
+        {hasMediaLibraryPermission ? <Button title="Save to camera roll" onPress={savePhoto} /> : undefined}
         <Button title="Try again" onPress={() => setPhoto(undefined)} />
       </SafeAreaView>
     );

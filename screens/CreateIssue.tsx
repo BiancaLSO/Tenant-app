@@ -2,14 +2,22 @@ import React, { useRef, useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity, Dimensions, FlatList, Button, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
-import { infoEntity } from "../redux/info/infoEntity";
-import { fetchAllInfo } from "../redux/info/infoSlice";
+
 import { CategoryEntity } from "../redux/category/categoryEntity";
 import { getCategoryData } from "../components/categoryData";
 import { Picture } from "../components/Picture";
 import { createIssue } from "../redux/issue/issueSlice";
 import { IssueEntity } from "../redux/issue/issueEntity";
+import { NavigationProp } from "@react-navigation/native";
 
+type RootStackParamList = {
+  CreateIssue: undefined;
+  Confirmation: { photoToDisplay?: string; imageUrl?: string; subject: string; description: string; issueId: number };
+};
+
+type MainProps = {
+  navigation: NavigationProp<RootStackParamList, "CreateIssue">;
+};
 interface ChipProps {
   label: string;
   onPress: () => void;
@@ -22,9 +30,9 @@ const Chip: React.FC<ChipProps> = ({ label, onPress, selected }) => (
   </TouchableOpacity>
 );
 
-export default function CreateIssue() {
+export default function CreateIssue({ navigation }: MainProps) {
   const dispatch = useDispatch<AppDispatch>();
-
+  const [photoName, setPhotoName] = useState("");
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -57,11 +65,29 @@ export default function CreateIssue() {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    const response = await dispatch(createIssue(new IssueEntity(subject, description, photoToDisplay)));
-
-    if (response) {
-      setImageUrl(response.payload.imageUrl);
+    let response;
+    if (photoToDisplay) {
+      response = await dispatch(createIssue(new IssueEntity(subject, description, photoToDisplay)));
+    } else {
+      response = await dispatch(createIssue(new IssueEntity(subject, description)));
     }
+
+    if (response && response.payload.id) {
+      console.log(response);
+      const issueId = response.payload.id;
+
+      if (response.payload.imageUrl && photoToDisplay) {
+        const imageUrl = response.payload.imageUrl;
+        navigation.navigate("Confirmation", { photoToDisplay, imageUrl, subject, description, issueId });
+      } else {
+        navigation.navigate("Confirmation", { photoToDisplay, subject, description, issueId });
+      }
+    }
+  };
+
+  const handlePhotoName = (name: string) => {
+    console.log("Received photo name:", name);
+    setPhotoName(name);
   };
 
   return (
@@ -87,22 +113,30 @@ export default function CreateIssue() {
           </View>
           <View style={[styles.cameraContainer, { height: camera ? 650 : 100 }]}>
             {camera ? (
-              <TouchableOpacity onPress={() => handleOpenCamera(false)} style={styles.button}>
-                <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Hide camera</Text>
-              </TouchableOpacity>
+              <>
+                <Text style={styles.label}>Take a picture</Text>
+                <TouchableOpacity onPress={() => handleOpenCamera(false)} style={styles.button}>
+                  <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Hide camera</Text>
+                </TouchableOpacity>
+              </>
             ) : (
-              <TouchableOpacity onPress={() => handleOpenCamera(true)} style={styles.button}>
-                <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Open camera</Text>
-              </TouchableOpacity>
+              <>
+                <Text style={styles.label}>Take a picture (optional)</Text>
+                <TouchableOpacity onPress={() => handleOpenCamera(true)} style={styles.button}>
+                  <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Open camera</Text>
+                </TouchableOpacity>
+              </>
             )}
-            {camera ? <Picture setCamera={setCamera} setPhotoToDisplay={setPhotoToDisplay}></Picture> : <></>}
+            {camera ? <Picture setCamera={setCamera} setPhotoToDisplay={setPhotoToDisplay} handlePhotoName={handlePhotoName}></Picture> : <></>}
+            {photoName !== "" && <Text>You picture was saved:{photoName}</Text>}
           </View>
-          {photoToDisplay && imageUrl ? <Image source={{ uri: imageUrl }} style={styles.uploadedImage} /> : null}
+          {/* {photoToDisplay && imageUrl ? <Image source={{ uri: imageUrl }} style={styles.uploadedImage} /> : null} */}
+          {!camera && (
+            <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+              <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Create issue</Text>
+            </TouchableOpacity>
+          )}
         </View>
-
-        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-          <Text style={{ color: "black", textAlign: "center", fontSize: 15 }}>Create issue</Text>
-        </TouchableOpacity>
       </ScrollView>
     </View>
   );
