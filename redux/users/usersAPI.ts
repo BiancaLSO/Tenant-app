@@ -4,13 +4,27 @@ import { UsersEntity } from "../users/usersEntity";
 import { SignUpUser } from "./signupuserEntity";
 
 export class UsersAPI {
-  static baseUrl: string = Platform.OS === "ios" ? "localhost" : "192.168.1.9";
-  static ip: string = "192.168.1.9";
+  static baseUrl: string = Platform.OS === "ios" ? "localhost" : "10.182.2.24";
+  static ip: string = "10.182.2.24";
 
-  static async signup(user: SignUpUser) {
+  static async signupTenant(user: SignUpUser) {
     try {
       const result = await axios.post(
         "http://" + this.ip + ":3000/auth/signuptenant",
+        user
+      );
+      console.log("back from server", result.data);
+
+      return result.data;
+    } catch (error) {
+      console.log("nope");
+    }
+  }
+
+  static async signupBoard(user: SignUpUser) {
+    try {
+      const result = await axios.post(
+        "http://" + this.ip + ":3000/auth/signupboardmember",
         user
       );
       console.log("back from server", result.data);

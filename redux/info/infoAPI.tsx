@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import { infoEntity } from "./infoEntity";
 
 export class InfoAPI {
-  static myIp: string = "10.29.0.161";
+  static myIp: string = "10.182.2.24";
 
   //   in case we decide to be able to create info
   //   static async create(info: infoEntity) {
