@@ -2,13 +2,15 @@ import React, { useRef, useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity, Dimensions, FlatList, Button, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
-
+import * as SecureStore from "expo-secure-store";
 import { CategoryEntity } from "../redux/category/categoryEntity";
 import { getCategoryData } from "../components/categoryData";
 import { Picture } from "../components/Picture";
 import { createIssue } from "../redux/issue/issueSlice";
 import { IssueEntity } from "../redux/issue/issueEntity";
 import { NavigationProp } from "@react-navigation/native";
+import { UsersEntity } from "../redux/users/usersEntity";
+import { fetchUserData } from "../redux/users/usersSlice";
 
 type RootStackParamList = {
   CreateIssue: undefined;
@@ -38,12 +40,34 @@ export default function CreateIssue({ navigation }: MainProps) {
   const [imageUrl, setImageUrl] = useState("");
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
   const selectedCategory: CategoryEntity | null = useSelector((state: RootState) => state.category.selectedCategory);
-
+  // const userId: number | undefined = useSelector((state: RootState) => state.users.user?.id);
+  const [userId, setUserId] = useState<number | undefined>(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const [camera, setCamera] = useState(false);
   const [photoToDisplay, setPhotoToDisplay] = useState("");
 
   const data: string[] = selectedCategory ? getCategoryData(selectedCategory.name) : [];
+
+  const user: UsersEntity | null = useSelector((state: RootState) => state.users.user);
+  console.log("Create issue user", user);
+
+  // useEffect(() => {
+  //   const fetchUserId = async () => {
+  //     const id: string | null = await SecureStore.getItemAsync("id");
+  //     const userId: number | undefined = parseInt(id ?? "");
+  //     setUserId(userId);
+  //     console.log("from Use Effect", userId);
+  //     // Use the userId value here or dispatch an action with the userId
+  //   };
+
+  //   fetchUserId();
+  // }, []);
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, []);
+  useEffect(() => {
+    setUserId(user?.id);
+  }, [user]);
 
   const handleChipPress = (chip: string) => {
     if (selectedChips.includes(chip)) {
@@ -67,9 +91,13 @@ export default function CreateIssue({ navigation }: MainProps) {
 
     let response;
     if (photoToDisplay) {
-      response = await dispatch(createIssue(new IssueEntity(subject, description, photoToDisplay)));
+      const issue = new IssueEntity(subject, description, photoToDisplay);
+      console.log("userId from CreateIssue", userId);
+      response = await dispatch(createIssue({ issue, userId }));
     } else {
-      response = await dispatch(createIssue(new IssueEntity(subject, description)));
+      const issue = new IssueEntity(subject, description);
+      console.log("userId from CreateIssue", userId);
+      response = await dispatch(createIssue({ issue, userId }));
     }
 
     if (response && response.payload.id) {

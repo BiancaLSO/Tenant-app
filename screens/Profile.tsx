@@ -1,43 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { UsersEntity } from "../redux/users/usersEntity";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import { fetchUserData } from "../redux/users/usersSlice";
 
 export default function Profile() {
+  const user: UsersEntity | null = useSelector(
+    (state: RootState) => state.users.user
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, []);
+
   return (
     <View style={styles.container}>
-      <View style={styles.user}>
-        <Image style={styles.imgProfile} source={require("../assets/Rectangle.png")} />
-        <Text style={styles.name}>First Last Name</Text>
-        <Text style={styles.typeOfUser}>type of user</Text>
-      </View>
-      <View style={styles.contact}>
-        <TouchableOpacity style={styles.button}>
-          <Icon name="edit" size={30} color="#F2F4F7" style={styles.icons} />
-          <Text style={styles.buttonText}>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Icon name="delete" size={30} color="#F2F4F7" style={styles.icons} />
-          <Text style={styles.buttonText}>Delete</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <View style={styles.details}>
-          <Text style={styles.detailsTitle}>Email</Text>
-          <Text style={styles.detailsInfo}>text</Text>
-        </View>
-        <View style={styles.details}>
-          <Text style={styles.detailsTitle}>Phone</Text>
-          <Text style={styles.detailsInfo}>text</Text>
-        </View>
-        <View style={styles.details}>
-          <Text style={styles.detailsTitle}>Address</Text>
-          <Text style={styles.detailsInfo}>full address</Text>
-        </View>
-        <View style={styles.details}>
-          <Text style={styles.detailsTitle}>Period</Text>
-          <Text style={styles.detailsInfo}>startdate and end date</Text>
-        </View>
-      </View>
+      {user ? (
+        <>
+          <View style={styles.user}>
+            <Image
+              style={styles.imgProfile}
+              source={require("../assets/Rectangle.png")}
+            />
+            <Text style={styles.name}>
+              {user.firstName} {user.lastName}
+            </Text>
+            <Text style={styles.typeOfUser}>{user.role}</Text>
+          </View>
+          <View style={styles.contact}>
+            <TouchableOpacity style={styles.button}>
+              <Icon
+                name="edit"
+                size={30}
+                color="#F2F4F7"
+                style={styles.icons}
+              />
+              <Text style={styles.buttonText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Icon
+                name="delete"
+                size={30}
+                color="#F2F4F7"
+                style={styles.icons}
+              />
+              <Text style={styles.buttonText}>Delete</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <View style={styles.details}>
+              <Text style={styles.detailsTitle}>Email</Text>
+              <Text style={styles.detailsInfo}>{user.email}</Text>
+            </View>
+            <View style={styles.details}>
+              <Text style={styles.detailsTitle}>Phone</Text>
+              <Text style={styles.detailsInfo}>{user.phone}</Text>
+            </View>
+            <View style={styles.details}>
+              <Text style={styles.detailsTitle}>Address</Text>
+              <Text style={styles.detailsInfo}>full address</Text>
+            </View>
+          </View>
+        </>
+      ) : (
+        <Text>Loading profile...</Text>
+      )}
     </View>
   );
 }

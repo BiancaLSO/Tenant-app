@@ -1,6 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IssueAPI } from "./issueAPI";
 import { IssueEntity } from "./issueEntity";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 export const fetchAllIssues = createAsyncThunk("issue/fetchAllIssues", async () => {
   const response = await IssueAPI.fetchAllIssues();
@@ -14,8 +16,18 @@ export const fetchUserIssues = createAsyncThunk("issue/fetchUserIssues", async (
   return response;
 });
 
-export const createIssue = createAsyncThunk("issue/create", async (issue: IssueEntity, thunkAPI) => {
-  const response = IssueAPI.createIssue(issue);
+// export const createIssue = createAsyncThunk("issue/create", async (issue: IssueEntity, thunkAPI) => {
+//   // const userId: number | undefined = useSelector((state: RootState) => state.users.user?.id);
+
+//   const response = IssueAPI.createIssue(issue, userId);
+//   return response;
+// });
+export const createIssue = createAsyncThunk("issue/create", async (payload: { issue: IssueEntity; userId?: number }, thunkAPI) => {
+  const { issue, userId } = payload; // Destructure the payload object
+
+  // const userId: number | undefined = useSelector((state: RootState) => state.users.user?.id);
+
+  const response = IssueAPI.createIssue(issue, userId);
   return response;
 });
 
