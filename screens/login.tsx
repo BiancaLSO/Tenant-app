@@ -35,11 +35,35 @@ export function Login({ navigation }: MainProps) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const handleLoginSuccess = (event: any) => {
     event.preventDefault();
-    dispatch(login(new UsersEntity(email, password)));
-    navigation.navigate("Home");
+
+    if (validateFields()) {
+      dispatch(login(new UsersEntity(email, password)));
+      navigation.navigate("Home");
+    }
+  };
+  const validateFields = () => {
+    let isValid = true;
+
+    if (!email.includes("@")) {
+      setEmailError("Email is required");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (password.length < 4) {
+      setPasswordError("Please enter a password with at least 4 characters.");
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
   };
 
   const handleLogout = async () => {
@@ -80,9 +104,15 @@ export function Login({ navigation }: MainProps) {
             <TextInput
               placeholder="Indtast din email adresse"
               style={styles.input}
-              onChangeText={setEmail}
+              onChangeText={(text) => {
+                setEmail(text);
+                setEmailError(""); // Clear email error when typing
+              }}
               value={email.toLowerCase()}
             />
+            {emailError !== "" && (
+              <Text style={styles.error}>{emailError}</Text>
+            )}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Password</Text>
@@ -90,9 +120,15 @@ export function Login({ navigation }: MainProps) {
               secureTextEntry={true}
               placeholder="*******"
               style={styles.input}
-              onChangeText={setPassword}
+              onChangeText={(text) => {
+                setPassword(text);
+                setPasswordError(""); // Clear email error when typing
+              }}
               value={password}
             />
+            {passwordError !== "" && (
+              <Text style={styles.error}>{passwordError}</Text>
+            )}
           </View>
 
           <TouchableOpacity style={styles.button} onPress={handleLoginSuccess}>
@@ -186,5 +222,10 @@ const styles = StyleSheet.create({
     // right: "-10.27%",
     top: "61%",
     // bottom: "-14.58%",
+  },
+  error: {
+    color: "red",
+    fontWeight: "900",
+    textAlign: "left",
   },
 });

@@ -18,10 +18,19 @@ export const login = createAsyncThunk(
     return response;
   }
 );
-export const signup = createAsyncThunk(
-  "auth/signup", // This is a name for the thunk (must be unique) not the endpoint
-  async (userSignup: SignUpUser, thunkAPI) => {
-    const response = UsersAPI.signup(userSignup);
+export const signupTenant = createAsyncThunk(
+  "auth/signupTenant", // This is a name for the thunk (must be unique) not the endpoint
+  async (userSignup: SignUpUser) => {
+    const response = UsersAPI.signupTenant(userSignup);
+
+    return response;
+  }
+);
+
+export const signupBoard = createAsyncThunk(
+  "auth/signupBoard", // This is a name for the thunk (must be unique) not the endpoint
+  async (userSignup: SignUpUser) => {
+    const response = UsersAPI.signupBoard(userSignup);
 
     return response;
   }
@@ -54,12 +63,14 @@ const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(signup.fulfilled, (state, action) => {
+    builder.addCase(signupTenant.fulfilled, (state) => {
       console.log("running signup fulfilled");
       state.error = undefined;
-      // if (action.payload.id != undefined) {
-      //   state.error = "Signup success";
-      // }
+    });
+
+    builder.addCase(signupBoard.fulfilled, (state) => {
+      console.log("running signup fulfilled");
+      state.error = undefined;
     });
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(login.fulfilled, (state, action) => {
@@ -70,6 +81,22 @@ const usersSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       if (action.error.message === "Request failed with status code 401") {
         state.error = "Invalid login";
+        state.token = null;
+      }
+
+      console.log("error in slice", action.error);
+    });
+    builder.addCase(signupTenant.rejected, (state, action) => {
+      if (action.error.message === "Request failed with status code 401") {
+        state.error = "Invalid signup";
+        state.token = null;
+      }
+      console.log("error in slice", action.error);
+    });
+
+    builder.addCase(signupBoard.rejected, (state, action) => {
+      if (action.error.message === "Request failed with status code 401") {
+        state.error = "Invalid signup";
         state.token = null;
       }
 

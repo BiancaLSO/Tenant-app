@@ -8,10 +8,24 @@ export class UsersAPI {
     Platform.OS === "ios" ? "localhost" : "192.168.1.109";
   static ip: string = "192.168.1.109";
 
-  static async signup(user: SignUpUser) {
+  static async signupTenant(user: SignUpUser) {
     try {
       const result = await axios.post(
         "http://" + this.ip + ":3000/auth/signuptenant",
+        user
+      );
+      console.log("back from server", result.data);
+
+      return result.data;
+    } catch (error) {
+      console.log("nope");
+    }
+  }
+
+  static async signupBoard(user: SignUpUser) {
+    try {
+      const result = await axios.post(
+        "http://" + this.ip + ":3000/auth/signupboardmember",
         user
       );
       console.log("back from server", result.data);
