@@ -37,18 +37,40 @@ export default function CreateIssue({ navigation }: MainProps) {
   const [photoName, setPhotoName] = useState("");
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
   const selectedCategory: CategoryEntity | null = useSelector((state: RootState) => state.category.selectedCategory);
   const categoryId = selectedCategory?.id;
   const [userId, setUserId] = useState<number | undefined>(0);
+
   const scrollViewRef = useRef<ScrollView>(null);
   const [camera, setCamera] = useState(false);
   const [photoToDisplay, setPhotoToDisplay] = useState("");
-  const route = useRoute<RouteProp<RootStackParamList, "CreateIssue">>();
-  // const categoryId = route.params.categoryId;
 
   const data: string[] = selectedCategory ? getCategoryData(selectedCategory.name) : [];
+
+  // validation
+  const [subjectError, setSubjectError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+
+  const validateForm = () => {
+    if (!subject || subject.length < 4) {
+      setSubjectError("Subject must be at least 4 characters.");
+      return false;
+    }
+
+    if (!description || description.length < 10) {
+      setDescriptionError("Description must be at least 10 characters.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const clearFieldErrors = () => {
+    setSubjectError("");
+    setDescriptionError("");
+  };
 
   const user: UsersEntity | null = useSelector((state: RootState) => state.users.user);
   useEffect(() => {
@@ -77,6 +99,10 @@ export default function CreateIssue({ navigation }: MainProps) {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     let response;
     if (photoToDisplay) {
@@ -116,13 +142,33 @@ export default function CreateIssue({ navigation }: MainProps) {
         <View style={styles.container}>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Subject</Text>
-            <TextInput placeholder="Insert the subject" style={styles.input} onChangeText={setSubject} value={subject} />
+            <TextInput
+              placeholder="Insert the subject"
+              style={styles.input}
+              onChangeText={(text) => {
+                setSubject(text);
+                setSubjectError("");
+              }}
+              value={subject}
+            />
+            {subjectError !== "" && <Text style={styles.error}>{subjectError}</Text>}
             <FlatList data={data} keyExtractor={(item) => item} horizontal showsHorizontalScrollIndicator={false} renderItem={({ item }) => <Chip label={item} onPress={() => handleChipPress(item)} selected={selectedChips.includes(item)} />} />
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Description</Text>
 
-            <TextInput style={styles.textArea} multiline numberOfLines={6} placeholder="Describe your issue as detailed as possible." value={description} onChangeText={setDescription} />
+            <TextInput
+              style={styles.textArea}
+              multiline
+              numberOfLines={6}
+              placeholder="Describe your issue as detailed as possible."
+              value={description}
+              onChangeText={(text) => {
+                setDescription(text);
+                setDescriptionError("");
+              }}
+            />
+            {descriptionError !== "" && <Text style={styles.error}>{descriptionError}</Text>}
           </View>
           <View style={[styles.cameraContainer, { height: camera ? 650 : 100 }]}>
             {camera ? (
@@ -281,5 +327,10 @@ const styles = StyleSheet.create({
     height: 200,
     marginBottom: 20,
     resizeMode: "contain",
+  },
+  error: {
+    color: "red",
+    fontWeight: "900",
+    textAlign: "left",
   },
 });
