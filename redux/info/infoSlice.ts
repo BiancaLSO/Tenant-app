@@ -4,7 +4,6 @@ import { infoEntity } from "./infoEntity";
 
 export const fetchAllInfo = createAsyncThunk("info/fetchAllInfo", async () => {
   const response = await InfoAPI.fetchAllInfo();
-  console.log("response from thunk", response.data);
   return response;
 });
 

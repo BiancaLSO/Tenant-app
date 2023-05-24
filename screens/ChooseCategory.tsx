@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
-import { infoEntity } from "../redux/info/infoEntity";
-import { fetchAllInfo } from "../redux/info/infoSlice";
 import { CategoryEntity } from "../redux/category/categoryEntity";
 import { fetchAllCategories, setSelectedCategory } from "../redux/category/categorySlice";
 import { IssueEntity } from "../redux/issue/issueEntity";
 import { fetchUserIssues } from "../redux/issue/issueSlice";
 import { NavigationProp } from "@react-navigation/native";
+import { UsersEntity } from "../redux/users/usersEntity";
+import { fetchUserData } from "../redux/users/usersSlice";
 
 type RootStackParamList = {
   ChooseCategory: undefined;
@@ -21,20 +21,23 @@ type MainProps = {
 
 export default function ChooseCategory({ navigation }: MainProps) {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-
+  const [userId, setUserId] = useState<number | undefined>(0);
   const categories: CategoryEntity[] = useSelector((state: RootState) => state.category.categories);
   const userIssues: IssueEntity[] = useSelector((state: RootState) => state.issue.userIssues);
-  const selectedCategory: CategoryEntity | null = useSelector((state: RootState) => state.category.selectedCategory);
+  const user: UsersEntity | null = useSelector((state: RootState) => state.users.user);
 
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    dispatch(fetchUserData());
     dispatch(fetchAllCategories());
-    dispatch(fetchUserIssues());
   }, []);
   useEffect(() => {
-    console.log(userIssues);
-  }, [userIssues]);
+    setUserId(user?.id);
+  }, [user]);
+  useEffect(() => {
+    dispatch(fetchUserIssues(userId));
+  }, [userId]);
 
   const handleChooseCategory = (category: CategoryEntity) => {
     dispatch(setSelectedCategory(category));
@@ -42,9 +45,6 @@ export default function ChooseCategory({ navigation }: MainProps) {
       navigation.navigate("CreateIssue");
     }
   };
-  useEffect(() => {
-    console.log(selectedCategory);
-  }, [selectedCategory]);
 
   const renderContent = () => {
     if (selectedTabIndex === 0) {
@@ -89,7 +89,7 @@ export default function ChooseCategory({ navigation }: MainProps) {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setSelectedTabIndex(1)}>
             <View style={[styles.tabButton, selectedTabIndex === 1 && styles.tabButtonSelected]}>
-              <Text>My issues ({userIssues.length})</Text>
+              <Text>My issues ({userIssues?.length})</Text>
             </View>
           </TouchableOpacity>
         </View>

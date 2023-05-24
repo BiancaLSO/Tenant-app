@@ -8,7 +8,7 @@ import { getCategoryData } from "../components/categoryData";
 import { Picture } from "../components/Picture";
 import { createIssue } from "../redux/issue/issueSlice";
 import { IssueEntity } from "../redux/issue/issueEntity";
-import { NavigationProp } from "@react-navigation/native";
+import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 import { UsersEntity } from "../redux/users/usersEntity";
 import { fetchUserData } from "../redux/users/usersSlice";
 
@@ -40,28 +40,17 @@ export default function CreateIssue({ navigation }: MainProps) {
   const [imageUrl, setImageUrl] = useState("");
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
   const selectedCategory: CategoryEntity | null = useSelector((state: RootState) => state.category.selectedCategory);
-  // const userId: number | undefined = useSelector((state: RootState) => state.users.user?.id);
+  const categoryId = selectedCategory?.id;
   const [userId, setUserId] = useState<number | undefined>(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const [camera, setCamera] = useState(false);
   const [photoToDisplay, setPhotoToDisplay] = useState("");
+  const route = useRoute<RouteProp<RootStackParamList, "CreateIssue">>();
+  // const categoryId = route.params.categoryId;
 
   const data: string[] = selectedCategory ? getCategoryData(selectedCategory.name) : [];
 
   const user: UsersEntity | null = useSelector((state: RootState) => state.users.user);
-  console.log("Create issue user", user);
-
-  // useEffect(() => {
-  //   const fetchUserId = async () => {
-  //     const id: string | null = await SecureStore.getItemAsync("id");
-  //     const userId: number | undefined = parseInt(id ?? "");
-  //     setUserId(userId);
-  //     console.log("from Use Effect", userId);
-  //     // Use the userId value here or dispatch an action with the userId
-  //   };
-
-  //   fetchUserId();
-  // }, []);
   useEffect(() => {
     dispatch(fetchUserData());
   }, []);
@@ -92,16 +81,13 @@ export default function CreateIssue({ navigation }: MainProps) {
     let response;
     if (photoToDisplay) {
       const issue = new IssueEntity(subject, description, photoToDisplay);
-      console.log("userId from CreateIssue", userId);
-      response = await dispatch(createIssue({ issue, userId }));
+      response = await dispatch(createIssue({ issue, userId, categoryId }));
     } else {
       const issue = new IssueEntity(subject, description);
-      console.log("userId from CreateIssue", userId);
-      response = await dispatch(createIssue({ issue, userId }));
+      response = await dispatch(createIssue({ issue, userId, categoryId }));
     }
 
     if (response && response.payload.id) {
-      console.log(response);
       const issueId = response.payload.id;
 
       if (response.payload.imageUrl && photoToDisplay) {
@@ -114,7 +100,6 @@ export default function CreateIssue({ navigation }: MainProps) {
   };
 
   const handlePhotoName = (name: string) => {
-    console.log("Received photo name:", name);
     setPhotoName(name);
   };
 

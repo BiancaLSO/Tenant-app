@@ -1,33 +1,22 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IssueAPI } from "./issueAPI";
 import { IssueEntity } from "./issueEntity";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 
 export const fetchAllIssues = createAsyncThunk("issue/fetchAllIssues", async () => {
   const response = await IssueAPI.fetchAllIssues();
-  console.log("response from thunk", response.data);
   return response;
 });
-export const fetchUserIssues = createAsyncThunk("issue/fetchUserIssues", async () => {
-  // here make it not hardcoded, to take id from logged in user
-  const response = await IssueAPI.fetchUserIssues(1);
-  console.log("response from thunk", response.data);
+export const fetchUserIssues = createAsyncThunk("issue/fetchUserIssues", async (userId: number | undefined) => {
+  const response = await IssueAPI.fetchUserIssues(userId);
   return response;
 });
 
-// export const createIssue = createAsyncThunk("issue/create", async (issue: IssueEntity, thunkAPI) => {
-//   // const userId: number | undefined = useSelector((state: RootState) => state.users.user?.id);
-
-//   const response = IssueAPI.createIssue(issue, userId);
-//   return response;
-// });
-export const createIssue = createAsyncThunk("issue/create", async (payload: { issue: IssueEntity; userId?: number }, thunkAPI) => {
-  const { issue, userId } = payload; // Destructure the payload object
+export const createIssue = createAsyncThunk("issue/create", async (payload: { issue: IssueEntity; userId?: number; categoryId?: number | undefined }, thunkAPI) => {
+  const { issue, userId, categoryId } = payload; // Destructure the payload object
 
   // const userId: number | undefined = useSelector((state: RootState) => state.users.user?.id);
 
-  const response = IssueAPI.createIssue(issue, userId);
+  const response = IssueAPI.createIssue(issue, userId, categoryId);
   return response;
 });
 

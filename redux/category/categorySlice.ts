@@ -4,7 +4,6 @@ import { CategoryEntity } from "./categoryEntity";
 
 export const fetchAllCategories = createAsyncThunk("category/fetchAllCategories", async () => {
   const response = await CategoryAPI.fetchAllCategories();
-  console.log("response from thunk", response.data);
   return response;
 });
 

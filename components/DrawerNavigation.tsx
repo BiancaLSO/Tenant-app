@@ -7,6 +7,7 @@ import { Login } from "../screens/login";
 import { Signup } from "../screens/Signup";
 import CreateIssue from "../screens/ChooseCategory";
 import ChooseCategory from "../screens/ChooseCategory";
+import Confirmation from "../screens/Confirmation";
 
 const Drawer = createDrawerNavigator();
 

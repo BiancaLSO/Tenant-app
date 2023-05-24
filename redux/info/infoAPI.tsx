@@ -19,7 +19,6 @@ export class InfoAPI {
   static async fetchAllInfo() {
     try {
       const result = await axios.get("http://" + this.myIp + ":3000/infos");
-      console.log("result infos" + result);
 
       return result.data;
     } catch (error) {

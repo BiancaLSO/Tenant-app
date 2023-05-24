@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, TextInput, TextStyle, Toucha
 import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 
 type RootStackParamList = {
-  Home: undefined;
+  Menu: undefined;
   Confirmation: { photoToDisplay?: string; imageUrl?: string; subject: string; description: string; issueId: number };
 };
 
@@ -17,7 +17,7 @@ export default function Confirmation({ navigation }: MainProps) {
   const { photoToDisplay, imageUrl, subject, description, issueId } = route.params;
   console.log(imageUrl);
   const handleNavigate = () => {
-    navigation.navigate("Home");
+    navigation.navigate("Menu");
   };
   return (
     <ScrollView style={styles.rootContainer}>
