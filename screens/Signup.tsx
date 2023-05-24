@@ -236,7 +236,7 @@ export function Signup({ navigation }: MainProps) {
   if (showFormBoard) {
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <>
+        <View style={styles.innerContainer}>
           <View style={styles.containerFlex}>
             <TouchableOpacity onPress={handleGoBack} style={styles.goBackButton}>
               <Image source={require("../assets/Icon.png")} />
@@ -322,7 +322,7 @@ export function Signup({ navigation }: MainProps) {
           <TouchableOpacity style={styles.button} onPress={handleSignupBoard}>
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
-        </>
+        </View>
         {error && <Text>{error}</Text>}
       </ScrollView>
     );
@@ -332,12 +332,16 @@ export function Signup({ navigation }: MainProps) {
 const screen = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // justifyContent: "center",
-    // alignItems: "flex-start",
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
-    paddingBottom: 700, // Adjust this value as needed
+    // paddingBottom: 500, // Adjust this value as needed
     // marginBottom: 20,
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: "center",
   },
   containerModal: {
     flex: 1,
