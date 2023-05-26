@@ -11,9 +11,38 @@ export default function Profile() {
     (state: RootState) => state.users.user
   );
   const dispatch = useDispatch<AppDispatch>();
+  const [userInfo, setUserInfo] = useState({});
+  const [apartmentInfo, setApartmentInfo] = useState({
+    allowPets: false,
+    apartment: 0,
+    extraDetails: "",
+    floor: 0,
+    id: 0,
+    region: "",
+    street: "",
+  });
 
   useEffect(() => {
-    dispatch(fetchUserData());
+    const fetchData = async () => {
+      try {
+        const userFromProfile = await dispatch(fetchUserData());
+        setApartmentInfo({
+          allowPets: userFromProfile.payload.apartmentInfo.allowPets,
+          apartment: userFromProfile.payload.apartmentInfo.apartment,
+          extraDetails: userFromProfile.payload.apartmentInfo.extraDetails,
+          floor: userFromProfile.payload.apartmentInfo.floor,
+          id: userFromProfile.payload.apartmentInfo.id,
+          region: userFromProfile.payload.apartmentInfo.region,
+          street: userFromProfile.payload.apartmentInfo.street,
+        });
+        console.log(userFromProfile.payload.apartmentInfo.allowPets);
+        // await dispatch(fetchApartmentData(user));
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -59,10 +88,17 @@ export default function Profile() {
               <Text style={styles.detailsTitle}>Phone</Text>
               <Text style={styles.detailsInfo}>{user.phone}</Text>
             </View>
-            <View style={styles.details}>
-              <Text style={styles.detailsTitle}>Address</Text>
-              <Text style={styles.detailsInfo}>full address</Text>
-            </View>
+            {userInfo ? (
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>Address</Text>
+                <Text style={styles.detailsInfo}>
+                  {apartmentInfo.street} no. {apartmentInfo.apartment}, floor:{" "}
+                  {apartmentInfo.floor}, {apartmentInfo.region}
+                </Text>
+              </View>
+            ) : (
+              <></>
+            )}
           </View>
         </>
       ) : (

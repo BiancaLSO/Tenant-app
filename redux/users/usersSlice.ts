@@ -3,6 +3,8 @@ import { UsersEntity } from "./usersEntity";
 import * as SecureStore from "expo-secure-store";
 import { UsersAPI } from "../users/usersAPI";
 import { SignUpUser } from "./signupuserEntity";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 // First, create the thunk
 export const login = createAsyncThunk(
@@ -40,24 +42,51 @@ export const signupBoard = createAsyncThunk(
     return response;
   }
 );
+//   "apartment/fetchApartmentData",
+//   async (user: UsersEntity | null) => {
+//     try {
+//       const token: string | null = await SecureStore.getItemAsync("token");
 
-export const fetchUserData = createAsyncThunk("users/fetchUserData", async () => {
-  try {
-    // Get id from SecureStorage
-    const idString: string | null = await SecureStore.getItemAsync("id");
-    const id: number | null = idString ? JSON.parse(idString) : null;
+//       if (user) {
+//         const myApartmentInfoId = user.apartmentInfoId;
+//         console.log("thunk apartement", myApartmentInfo);
+//         console.log("thunk user", user);
+//         if (myApartmentInfo) {
+//           const apartmentData = await UsersAPI.fetchApartmentData(
+//             myApartmentInfo,
+//             token
+//           );
+//           console.log("APARTMENTDATA" + apartmentData);
+//           return apartmentData;
+//         }
+//       }
+//       return;
+//     } catch (error) {
+//       console.error("Error fetching user data:", error);
+//       throw error;
+//     }
+//   }
+// );
 
-    // Get token
-    const token: string | null = await SecureStore.getItemAsync("token");
+export const fetchUserData = createAsyncThunk(
+  "users/fetchUserData",
+  async () => {
+    try {
+      // Get id from SecureStorage
+      const idString: string | null = await SecureStore.getItemAsync("id");
+      const id: number | null = idString ? JSON.parse(idString) : null;
+      // Get token
+      const token: string | null = await SecureStore.getItemAsync("token");
 
-    const response = await UsersAPI.fetchUserData(id, token);
-
-    return response;
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    throw error;
+      const response = await UsersAPI.fetchUserData(id, token);
+      console.log("Response form slice", response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      throw error;
+    }
   }
-});
+);
 
 interface UsersState {
   token: string | undefined | null;
