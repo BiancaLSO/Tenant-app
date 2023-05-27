@@ -439,10 +439,9 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#101828",
     borderRadius: 5,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    width: screen.width - 40,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginHorizontal: 10,
   },
   buttonText: {
     color: "white",

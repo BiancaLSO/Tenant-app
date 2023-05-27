@@ -3,6 +3,7 @@ import Main from "../screens/Main";
 import React, { useState } from "react";
 import Info from "../screens/Info";
 import { infoEntity } from "../redux/info/infoEntity";
+import IssuesScreen from "../screens/IssuesScreen";
 
 export type TabMain = {
   Main: undefined;
@@ -32,8 +33,21 @@ export default function TabNavigation() {
   return (
     <InfoContext.Provider value={{ info, setInfo }}>
       <Tab.Navigator>
-        <Tab.Screen name="Main" component={Main} options={{ headerShown: false }} />
-        <Tab.Screen name="Info" component={Info} options={{ headerShown: false }} />
+        <Tab.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name="Info"
+          component={Info}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name="Issues"
+          component={IssuesScreen}
+          options={{ headerShown: false }}
+        />
       </Tab.Navigator>
     </InfoContext.Provider>
   );
