@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
@@ -20,7 +21,7 @@ export default function IssuesScreen() {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [searchedIssues, setSearchedIssues] = useState<IssueEntity[]>([]);
-
+  const filter = "this is it";
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -35,11 +36,24 @@ export default function IssuesScreen() {
     setSearchedIssues(filtered);
   };
 
+  const handleFilter = (filter: string) => {
+    // dispatch(setFilter(filter));
+    console.log("works");
+  };
+
   const issues = searchQuery ? searchedIssues : allIssues;
+  const filterButtons = [
+    "Bathroom",
+    "Kitchen",
+    "Parsites",
+    "Heating",
+    "Keys/Entrance",
+    "Other",
+  ];
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
       <View style={styles.rootContainer}>
-        <Text style={styles.pageTitle}>Possible Issues</Text>
+        {/* <Text style={styles.pageTitle}>Possible Issues</Text> */}
         <View style={styles.container}>
           <TextInput
             style={styles.input}
@@ -57,6 +71,32 @@ export default function IssuesScreen() {
             />
           </View>
         </View>
+
+        <ScrollView
+          horizontal
+          contentContainerStyle={styles.filterContainer}
+          showsHorizontalScrollIndicator={false}
+        >
+          {filterButtons.map((filterButton, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.filterButton,
+                filter === filterButton && styles.activeFilterButton,
+              ]}
+              onPress={() => handleFilter(filterButton)}
+            >
+              <Text
+                style={[
+                  styles.filterButtonText,
+                  filter === filterButton && styles.activeFilterButtonText,
+                ]}
+              >
+                {filterButton}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
         {issues.map((item) => (
           <View key={item.id} style={styles.cardContainer}>
             <View style={styles.imageContainer}>
@@ -156,5 +196,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 6,
+  },
+  filterContainer: {
+    flexGrow: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
+    paddingHorizontal: 10,
+  },
+  filterButton: {
+    backgroundColor: "#101828",
+    color: "white",
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginHorizontal: 5,
+  },
+  activeFilterButton: {
+    backgroundColor: "#A5ED7B",
+  },
+  filterButtonText: {
+    fontSize: 16,
+    color: "white",
+  },
+  activeFilterButtonText: {
+    color: "white",
   },
 });
