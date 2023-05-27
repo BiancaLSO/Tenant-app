@@ -10,13 +10,17 @@ export class UsersAPI {
 
   static async signupTenant(user: SignUpUser) {
     try {
-      const result = await axios.post("http://" + this.ip + ":3000/auth/signuptenant", user);
+      const result = await axios.post(
+        "http://" + this.ip + ":3000/auth/signuptenant",
+        user
+      );
       console.log("back from server", result.data);
 
       return result.data;
     } catch (error: any) {
       const errorResponse = error.response.data;
-      const errorMessage = errorResponse.message || "Sign-up failed. Please try again.";
+      const errorMessage =
+        errorResponse.message || "Sign-up failed. Please try again.";
       throw new Error(errorMessage);
     }
   }
@@ -30,20 +34,27 @@ export class UsersAPI {
     //   console.log("nope");
     // }
     try {
-      const result = await axios.post("http://" + this.ip + ":3000/auth/signupboardmember", user);
+      const result = await axios.post(
+        "http://" + this.ip + ":3000/auth/signupboardmember",
+        user
+      );
       console.log("back from server", result.data);
 
       return result.data;
     } catch (error: any) {
       const errorResponse = error.response.data;
-      const errorMessage = errorResponse.message || "Sign-up failed. Please try again.";
+      const errorMessage =
+        errorResponse.message || "Sign-up failed. Please try again.";
       throw new Error(errorMessage);
     }
   }
 
   static async login(user: UsersEntity) {
     // try {
-    const result = await axios.post("http://" + this.ip + ":3000/auth/login", user);
+    const result = await axios.post(
+      "http://" + this.ip + ":3000/auth/login",
+      user
+    );
 
     return result.data;
   }
@@ -62,7 +73,10 @@ export class UsersAPI {
     }
   }
 
-  static async fetchApartmentData(id: number | undefined, token: string | null) {
+  static async fetchApartmentData(
+    id: number | undefined,
+    token: string | null
+  ) {
     const url = `http://` + this.ip + `:3000/apartment-info/${id}`;
     try {
       const result = await axios.get(url, {
@@ -73,6 +87,24 @@ export class UsersAPI {
       return result.data;
     } catch (error) {
       console.log("This error is from the UsersAPI " + error);
+    }
+  }
+
+  static async updateUser(
+    id: number | null,
+    updatedUser: UsersEntity,
+    token: string | null
+  ) {
+    const url = `http://` + this.ip + `:3000/users/${id}`;
+    try {
+      const result = await axios.put(url, updatedUser, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return result.data;
+    } catch (error) {
+      console.log("This error is from the UsersAPI updateUser " + error);
     }
   }
 }

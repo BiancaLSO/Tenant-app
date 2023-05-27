@@ -5,8 +5,17 @@ import { UsersEntity } from "../redux/users/usersEntity";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { fetchUserData } from "../redux/users/usersSlice";
+import { NavigationProp } from "@react-navigation/native";
 
-export default function Profile() {
+type RootStackParamList = {
+  EditProfile: undefined;
+};
+
+type MainProps = {
+  navigation: NavigationProp<RootStackParamList, "EditProfile">;
+};
+
+export default function Profile({ navigation }: MainProps) {
   const user: UsersEntity | null = useSelector(
     (state: RootState) => state.users.user
   );
@@ -22,6 +31,10 @@ export default function Profile() {
     street: "",
   });
 
+  const onEditPress = () => {
+    navigation.navigate("EditProfile");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,8 +48,6 @@ export default function Profile() {
           region: userFromProfile.payload.apartmentInfo.region,
           street: userFromProfile.payload.apartmentInfo.street,
         });
-        console.log(userFromProfile.payload.apartmentInfo.allowPets);
-        // await dispatch(fetchApartmentData(user));
       } catch (error) {
         console.log("Error fetching data:", error);
       }
@@ -60,7 +71,7 @@ export default function Profile() {
             <Text style={styles.typeOfUser}>{user.role}</Text>
           </View>
           <View style={styles.contact}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={onEditPress}>
               <Icon
                 name="edit"
                 size={30}

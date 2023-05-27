@@ -42,31 +42,6 @@ export const signupBoard = createAsyncThunk(
     return response;
   }
 );
-//   "apartment/fetchApartmentData",
-//   async (user: UsersEntity | null) => {
-//     try {
-//       const token: string | null = await SecureStore.getItemAsync("token");
-
-//       if (user) {
-//         const myApartmentInfoId = user.apartmentInfoId;
-//         console.log("thunk apartement", myApartmentInfo);
-//         console.log("thunk user", user);
-//         if (myApartmentInfo) {
-//           const apartmentData = await UsersAPI.fetchApartmentData(
-//             myApartmentInfo,
-//             token
-//           );
-//           console.log("APARTMENTDATA" + apartmentData);
-//           return apartmentData;
-//         }
-//       }
-//       return;
-//     } catch (error) {
-//       console.error("Error fetching user data:", error);
-//       throw error;
-//     }
-//   }
-// );
 
 export const fetchUserData = createAsyncThunk(
   "users/fetchUserData",
@@ -83,6 +58,26 @@ export const fetchUserData = createAsyncThunk(
       return response;
     } catch (error) {
       console.error("Error fetching user data:", error);
+      throw error;
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async (updatedUser: UsersEntity, thunkAPI) => {
+    try {
+      // Get id from SecureStorage
+      const idString: string | null = await SecureStore.getItemAsync("id");
+      const id: number | null = idString ? JSON.parse(idString) : null;
+      // Get token
+      const token: string | null = await SecureStore.getItemAsync("token");
+
+      const response = await UsersAPI.updateUser(id, updatedUser, token);
+
+      return response;
+    } catch (error) {
+      console.error("Error updating user data:", error);
       throw error;
     }
   }
@@ -149,6 +144,18 @@ const usersSlice = createSlice({
     builder.addCase(fetchUserData.rejected, (state, action) => {
       console.log("fetchUserData rejected");
       state.error = "Error fetching user data";
+      state.user = null;
+    });
+
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      console.log("running update fulfilled");
+      state.error = undefined;
+      state.user = action.payload;
+    });
+
+    builder.addCase(updateUser.rejected, (state, action) => {
+      console.log("updateUser rejected");
+      state.error = "Error updating user data";
       state.user = null;
     });
   },
