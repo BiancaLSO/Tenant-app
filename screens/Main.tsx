@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TextStyle,
+  TouchableOpacity,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Image, Dimensions } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
@@ -34,15 +42,22 @@ export default function Main({ navigation }: MainProps) {
 
   return (
     <ScrollView style={styles.rootContainer}>
-      <View style={styles.container}>
+      {/* <View style={styles.container}>
         <TextInput style={styles.input} placeholder="Look for issues other people encountered" value={searchQuery} onChangeText={(text) => setSearchQuery(text)} onSubmitEditing={handleSearch} />
         <View style={styles.iconContainer}>
           <Feather name="search" size={20} color="black" style={styles.icon} onPress={handleSearch} />
         </View>
-      </View>
-      <ScrollView showsHorizontalScrollIndicator={false} style={styles.scrollView} horizontal={true}>
+      </View> */}
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        style={styles.scrollView}
+        horizontal={true}
+      >
         <View style={styles.rectangleBlue}>
-          <Image source={require("../assets/Vector.png")} style={styles.iconCard1} />
+          <Image
+            source={require("../assets/Vector.png")}
+            style={styles.iconCard1}
+          />
           <View style={styles.textGrid}>
             <View>
               <Text style={styles.text1}>Rent has to be paid in</Text>
@@ -56,7 +71,10 @@ export default function Main({ navigation }: MainProps) {
           </View>
         </View>
         <View style={styles.rectangleGrey}>
-          <Image source={require("../assets/headset.png")} style={styles.iconCard2} />
+          <Image
+            source={require("../assets/headset.png")}
+            style={styles.iconCard2}
+          />
           <View style={styles.textGrid}>
             <View>
               <Text style={styles.text2}>Service center closes in</Text>
@@ -68,7 +86,10 @@ export default function Main({ navigation }: MainProps) {
           </View>
         </View>
         <View style={[styles.rectangleGrey, styles.marginRight]}>
-          <Image source={require("../assets/person.png")} style={styles.iconCard3} />
+          <Image
+            source={require("../assets/person.png")}
+            style={styles.iconCard3}
+          />
           <View style={styles.textGrid}>
             <View>
               <Text style={styles.text2}>Property office closes in</Text>
@@ -84,58 +105,101 @@ export default function Main({ navigation }: MainProps) {
         <Text style={styles.title2}>Shortcuts</Text>
         <TouchableOpacity onPress={handleNavigateInfo}>
           <View style={styles.shortcutFlex}>
-            <Image source={require("../assets/Administrativ-hjaelp.png")} style={styles.iconAdm} />
+            <Image
+              source={require("../assets/Administrativ-hjaelp.png")}
+              style={styles.iconAdm}
+            />
             <View style={styles.borderBottom}>
               <View>
                 <Text style={styles.shorcutTitle}>Administrativ help</Text>
-                <Text style={styles.text2}>Permits, Sublets, Termination...</Text>
+                <Text style={styles.text2}>
+                  Permits, Sublets, Termination...
+                </Text>
               </View>
-              <Feather name="chevron-right" style={styles.arrowRight} size={30} color="#000" />
+              <Feather
+                name="chevron-right"
+                style={styles.arrowRight}
+                size={30}
+                color="#000"
+              />
             </View>
           </View>
         </TouchableOpacity>
         <View style={styles.shortcutFlex}>
-          <Image source={require("../assets/Beboerservice.png")} style={styles.iconAdm} />
+          <Image
+            source={require("../assets/Beboerservice.png")}
+            style={styles.iconAdm}
+          />
           <View style={styles.borderBottom}>
             <View>
               <Text style={styles.shorcutTitle}>Issues service</Text>
               <Text style={styles.text2}>Defects, Repairs, Improveme...</Text>
             </View>
-            <Feather name="chevron-right" style={styles.arrowRight} size={30} color="#000" />
+            <Feather
+              name="chevron-right"
+              style={styles.arrowRight}
+              size={30}
+              color="#000"
+            />
           </View>
         </View>
         <TouchableOpacity onPress={handleNavigateProfile}>
           <View style={styles.shortcutFlex}>
-            <Image source={require("../assets/House.png")} style={styles.iconAdm} />
+            <Image
+              source={require("../assets/House.png")}
+              style={styles.iconAdm}
+            />
             <View style={styles.borderBottom}>
               <View>
                 <Text style={styles.shorcutTitle}>My profile</Text>
-                <Text style={styles.text2}>Personal Info, Apartment Info...</Text>
+                <Text style={styles.text2}>
+                  Personal Info, Apartment Info...
+                </Text>
               </View>
 
-              <Feather name="chevron-right" style={styles.arrowRight} size={30} color="#000" />
+              <Feather
+                name="chevron-right"
+                style={styles.arrowRight}
+                size={30}
+                color="#000"
+              />
             </View>
           </View>
         </TouchableOpacity>
       </View>
       <View>
         <Text style={[styles.title2, styles.helpSection]}>Help Articles</Text>
-        <ScrollView showsHorizontalScrollIndicator={false} style={[styles.scrollView, styles.marginBottom]} horizontal={true}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          style={[styles.scrollView, styles.marginBottom]}
+          horizontal={true}
+        >
           <View>
             <TouchableOpacity onPress={handleNavigateInfo}>
-              <Image source={require("../assets/building.png")} style={styles.helpImg} />
+              <Image
+                source={require("../assets/building.png")}
+                style={styles.helpImg}
+              />
             </TouchableOpacity>
             <Text style={styles.articleTitle}>Can I rent with a dog?</Text>
           </View>
           <View>
             <TouchableOpacity onPress={handleNavigateInfo}>
-              <Image source={require("../assets/garden.png")} style={styles.helpImg} />
+              <Image
+                source={require("../assets/garden.png")}
+                style={styles.helpImg}
+              />
             </TouchableOpacity>
-            <Text style={styles.articleTitle}>What common areas do I have?</Text>
+            <Text style={styles.articleTitle}>
+              What common areas do I have?
+            </Text>
           </View>
           <View>
             <TouchableOpacity onPress={handleNavigateInfo}>
-              <Image source={require("../assets/livingroom.png")} style={[styles.helpImg, styles.marginRight]} />
+              <Image
+                source={require("../assets/livingroom.png")}
+                style={[styles.helpImg, styles.marginRight]}
+              />
             </TouchableOpacity>
             <Text style={styles.articleTitle}>Community and activities.</Text>
           </View>
