@@ -78,12 +78,17 @@ export function Signup({ navigation }: MainProps) {
       return; // Exit if form validation fails
     }
 
-    const success = await dispatch(signupTenant(new SignUpUser(email, password, firstName, lastName, phone, roleTenant)));
-
-    if (success) {
-      clearFieldErrors();
-      navigation.navigate("Login");
-    } else {
+    try {
+      const action = await dispatch(signupTenant(new SignUpUser(email, password, firstName, lastName, phone, roleTenant)));
+      if (action.payload && !action.payload.error) {
+        clearFieldErrors();
+        navigation.navigate("Login");
+        console.log(action.payload);
+      } else {
+        setEmailError("Email already exists.");
+        console.log("Sign-up failed");
+      }
+    } catch (error) {
       setErrors("Sign-up failed. Please try again.");
       console.log("Sign-up failed");
     }
@@ -91,19 +96,27 @@ export function Signup({ navigation }: MainProps) {
 
   const handleSignupBoard = async (event: any) => {
     event.preventDefault();
+
     if (!validateForm()) {
       return; // Exit if form validation fails
     }
-    const success = await dispatch(signupBoard(new SignUpUser(email, password, firstName, lastName, phone, roleBoard)));
 
-    if (success) {
-      clearFieldErrors();
-      navigation.navigate("Login");
-    } else {
+    try {
+      const action = await dispatch(signupBoard(new SignUpUser(email, password, firstName, lastName, phone, roleBoard)));
+      if (action.payload && !action.payload.error) {
+        clearFieldErrors();
+        navigation.navigate("Login");
+        console.log(action.payload);
+      } else {
+        setEmailError("Email already exists.");
+        console.log("Sign-up failed");
+      }
+    } catch (error) {
       setErrors("Sign-up failed. Please try again.");
       console.log("Sign-up failed");
     }
   };
+
   const handleYesClick = () => {
     setShowFormTenant(true);
     setShowFormBoard(false);
