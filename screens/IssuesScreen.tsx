@@ -17,10 +17,10 @@ import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "@react-navigation/native";
 type RootStackParamList = {
-  CreateIssue: undefined;
+  ChooseCategory: undefined;
 };
 type MainProps = {
-  navigation: NavigationProp<RootStackParamList, "CreateIssue">;
+  navigation: NavigationProp<RootStackParamList, "ChooseCategory">;
 };
 
 export default function IssuesScreen({ navigation }: MainProps) {
@@ -74,7 +74,7 @@ export default function IssuesScreen({ navigation }: MainProps) {
   };
 
   const handleCreateIssue = () => {
-    navigation.navigate("CreateIssue");
+    navigation.navigate("ChooseCategory");
   };
 
   return (
