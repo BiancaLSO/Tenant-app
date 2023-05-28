@@ -3,8 +3,6 @@ import { UsersEntity } from "./usersEntity";
 import * as SecureStore from "expo-secure-store";
 import { UsersAPI } from "../users/usersAPI";
 import { SignUpUser } from "./signupuserEntity";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 
 // First, create the thunk
 export const login = createAsyncThunk(
@@ -75,6 +73,25 @@ export const updateUser = createAsyncThunk(
 
       const response = await UsersAPI.updateUser(id, updatedUser, token);
 
+      return response;
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      throw error;
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  "users/deleteUser",
+  async (thunkAPI) => {
+    try {
+      // Get id from SecureStorage
+      const idString: string | null = await SecureStore.getItemAsync("id");
+      const id: number | null = idString ? JSON.parse(idString) : null;
+      // Get token
+      const token: string | null = await SecureStore.getItemAsync("token");
+
+      const response = await UsersAPI.deleteUser(id, token);
       return response;
     } catch (error) {
       console.error("Error updating user data:", error);
@@ -157,6 +174,18 @@ const usersSlice = createSlice({
       console.log("updateUser rejected");
       state.error = "Error updating user data";
       state.user = null;
+    });
+
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      console.log("Delete user fulfilled");
+      state.error = undefined;
+      state.user = null;
+      state.token = null;
+    });
+
+    builder.addCase(deleteUser.rejected, (state, action) => {
+      console.log("Delete user rejected");
+      state.error = "Error deleting user";
     });
   },
 });

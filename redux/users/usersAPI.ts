@@ -107,4 +107,32 @@ export class UsersAPI {
       console.log("This error is from the UsersAPI updateUser " + error);
     }
   }
+
+  static async deleteTenant(id: number | null, token: string | null) {
+    const url = `http://` + this.ip + `:3000/users/tenant/${id}`;
+    try {
+      const result = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return result.data;
+    } catch (error) {
+      console.log("This error is from the UsersAPI deleteTenant " + error);
+    }
+  }
+
+  static async deleteUser(id: number | null, token: string | null) {
+    const url = `http://` + this.ip + `:3000/users/${id}`;
+    try {
+      const result = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return result.data;
+    } catch (error) {
+      console.log("This error is from the UsersAPI deleteUser " + error);
+    }
+  }
 }

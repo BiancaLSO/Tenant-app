@@ -10,6 +10,7 @@ import Confirmation from "../screens/Confirmation";
 import { Login } from "../screens/login";
 import { Signup } from "../screens/Signup";
 import EditProfile from "../screens/EditProfile";
+import { DeleteProfile } from "../screens/DeleteProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ export default function StackNavigation() {
       />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="DeleteProfile" component={DeleteProfile} />
       <Stack.Screen name="Info" component={Info} />
 
       {/* Issue Creation Stack */}

@@ -9,10 +9,14 @@ import { NavigationProp } from "@react-navigation/native";
 
 type RootStackParamList = {
   EditProfile: undefined;
+  DeleteProfile: undefined;
 };
 
 type MainProps = {
-  navigation: NavigationProp<RootStackParamList, "EditProfile">;
+  navigation: NavigationProp<
+    RootStackParamList,
+    "EditProfile" | "DeleteProfile"
+  >;
 };
 
 export default function Profile({ navigation }: MainProps) {
@@ -33,6 +37,10 @@ export default function Profile({ navigation }: MainProps) {
 
   const onEditPress = () => {
     navigation.navigate("EditProfile");
+  };
+
+  const onDeletePress = () => {
+    navigation.navigate("DeleteProfile");
   };
 
   useEffect(() => {
@@ -80,7 +88,7 @@ export default function Profile({ navigation }: MainProps) {
               />
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={onDeletePress}>
               <Icon
                 name="delete"
                 size={30}
