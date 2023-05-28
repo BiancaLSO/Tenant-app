@@ -105,21 +105,33 @@ export default function EditProfile() {
   };
 
   const validateForm = () => {
-    // setEmailError("");
-    // setFirstNameError("");
-    // setLastNameError("");
-    // setPhoneError("");
+    setEmailError("");
+    setFirstNameError("");
+    setLastNameError("");
+    setPhoneError("");
 
-    if (!email || !firstName || !lastName || !phone) {
+    if (!email) {
       setEmailError("Email is required.");
-      setFirstNameError("First name is required.");
-      setLastNameError("Last name is required.");
-      setPhoneError("Phone number is required.");
       return false;
     }
 
     if (!email.includes("@")) {
       setEmailError("Invalid email format.");
+      return false;
+    }
+
+    if (!firstName) {
+      setFirstNameError("First name is required.");
+      return false;
+    }
+
+    if (!lastName) {
+      setLastNameError("Last name is required.");
+      return false;
+    }
+
+    if (!phone) {
+      setPhoneError("Phone is required.");
       return false;
     }
 
@@ -191,22 +203,22 @@ export default function EditProfile() {
         {phoneError !== "" && <Text style={styles.error}>{phoneError}</Text>}
       </View>
       {/* Add them for admin */}
-      {/* <View style={styles.inputContainer}>
+      <View style={styles.inputContainer}>
         <Text style={styles.label}>Role</Text>
-        <TextInput style={styles.input} value={role} />
+        <TextInput style={styles.input} value={role} editable={false} />
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Address</Text>
-        <TextInput style={styles.input} value={address.street} />
-      </View> */}
+        <TextInput style={styles.input} editable={false}>
+          {address.street} no. {address.apartment}, {address.floor},{" "}
+          {address.region}
+        </TextInput>
+      </View>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText} onPress={handleUpdate}>
             Update
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

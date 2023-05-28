@@ -103,7 +103,7 @@ export default function Profile({ navigation }: MainProps) {
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>Address</Text>
                 <Text style={styles.detailsInfo}>
-                  {apartmentInfo.street} no. {apartmentInfo.apartment}, floor:{" "}
+                  {apartmentInfo.street} no. {apartmentInfo.apartment},{" "}
                   {apartmentInfo.floor}, {apartmentInfo.region}
                 </Text>
               </View>
