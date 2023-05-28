@@ -12,11 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { IssueEntity } from "../redux/issue/issueEntity";
-import {
-  fetchAllIssues,
-  fetchSearchIssues,
-  fetchFilteredIssues,
-} from "../redux/issue/issueSlice";
+import { fetchAllIssues, fetchFilteredIssues } from "../redux/issue/issueSlice";
 import { Feather } from "@expo/vector-icons";
 
 export default function IssuesScreen() {
@@ -50,10 +46,14 @@ export default function IssuesScreen() {
   };
 
   const handleFilter = (category: string) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category === "All" ? null : category);
   };
 
-  const issues = searchedIssues.length > 0 ? searchedIssues : allIssues;
+  const issues = searchQuery
+    ? searchedIssues
+    : selectedCategory
+    ? filteredIssues
+    : allIssues;
 
   const categoryMapping: { [key: string]: string | null } = {
     All: null,
@@ -117,7 +117,7 @@ export default function IssuesScreen() {
           })}
         </ScrollView>
 
-        {filteredIssues.map((item) => (
+        {issues.map((item) => (
           <View key={item.id} style={styles.cardContainer}>
             <View style={styles.imageContainer}>
               {item.imageUrl ? (
@@ -129,7 +129,7 @@ export default function IssuesScreen() {
             <View style={styles.contentContainer}>
               <Text style={styles.h2}>{item.subject}</Text>
               <Text style={styles.text}>{item.description}</Text>
-              <Text style={styles.text}>{item.category.name}</Text>
+              {/* <Text style={styles.text}>{item.category.name}</Text> */}
             </View>
           </View>
         ))}
