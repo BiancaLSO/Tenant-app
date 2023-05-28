@@ -14,8 +14,16 @@ import { AppDispatch, RootState } from "../store";
 import { IssueEntity } from "../redux/issue/issueEntity";
 import { fetchAllIssues, fetchFilteredIssues } from "../redux/issue/issueSlice";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "@react-navigation/native";
+type RootStackParamList = {
+  CreateIssue: undefined;
+};
+type MainProps = {
+  navigation: NavigationProp<RootStackParamList, "CreateIssue">;
+};
 
-export default function IssuesScreen() {
+export default function IssuesScreen({ navigation }: MainProps) {
   const allIssues: IssueEntity[] = useSelector(
     (state: RootState) => state.issue.issues
   );
@@ -65,9 +73,19 @@ export default function IssuesScreen() {
     Other: "Other",
   };
 
+  const handleCreateIssue = () => {
+    navigation.navigate("CreateIssue");
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
       <View style={styles.rootContainer}>
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={handleCreateIssue}
+        >
+          <Text style={styles.createButtonText}>Create an issue</Text>
+        </TouchableOpacity>
         <View style={styles.container}>
           <TextInput
             style={styles.input}
@@ -213,7 +231,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   container: {
-    marginTop: 20,
+    marginTop: 80,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
@@ -244,5 +262,23 @@ const styles = StyleSheet.create({
   },
   activeFilterButtonText: {
     color: "white",
+  },
+  createButton: {
+    backgroundColor: "#A5ED7B",
+    position: "absolute",
+    top: 20,
+    right: 20,
+    // borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    marginBottom: 30,
+    width: 152,
+    zIndex: 1, // Set a higher z-index to bring the button forward
+  },
+
+  createButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
