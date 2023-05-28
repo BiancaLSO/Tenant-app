@@ -44,11 +44,18 @@ export const fetchSearchIssues = createAsyncThunk(
     return response;
   }
 );
-
+export const fetchFilteredIssues = createAsyncThunk(
+  "issue/filter/filters",
+  async (category: string) => {
+    const response = await IssueAPI.fetchFilteredIssues(category);
+    return response;
+  }
+);
 interface issueState {
   issues: IssueEntity[];
   userIssues: IssueEntity[];
   searchedIssues: IssueEntity[];
+  filteredIssues: IssueEntity[];
   loading: boolean;
   photoToDisplay: any | null;
 }
@@ -58,6 +65,7 @@ const initialState: issueState = {
   userIssues: [],
   photoToDisplay: null,
   searchedIssues: [],
+  filteredIssues: [],
   loading: false,
 };
 
@@ -87,6 +95,17 @@ const issueSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(fetchSearchIssues.rejected, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(fetchFilteredIssues.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchFilteredIssues.fulfilled, (state, action) => {
+      state.filteredIssues = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(fetchFilteredIssues.rejected, (state, action) => {
       state.loading = false;
     });
   },

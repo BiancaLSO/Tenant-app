@@ -70,4 +70,16 @@ export class IssueAPI {
       console.log("error", error);
     }
   }
+  static async fetchFilteredIssues(category: string) {
+    try {
+      const result = await axios.get(
+        "http://" +
+          this.myIp +
+          `:3000/issues/filter/filters?category=${encodeURIComponent(category)}`
+      );
+      return result.data;
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
 }

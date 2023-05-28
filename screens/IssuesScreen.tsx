@@ -12,7 +12,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { IssueEntity } from "../redux/issue/issueEntity";
-import { fetchAllIssues, fetchSearchIssues } from "../redux/issue/issueSlice";
+import {
+  fetchAllIssues,
+  fetchSearchIssues,
+  fetchFilteredIssues,
+} from "../redux/issue/issueSlice";
 import { Feather } from "@expo/vector-icons";
 
 export default function IssuesScreen() {
@@ -21,12 +25,21 @@ export default function IssuesScreen() {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [searchedIssues, setSearchedIssues] = useState<IssueEntity[]>([]);
-  const filter = "this is it";
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const filteredIssues = useSelector(
+    (state: RootState) => state.issue.filteredIssues
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(fetchAllIssues());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedCategory !== null) {
+      dispatch(fetchFilteredIssues(selectedCategory));
+    }
+  }, [dispatch, selectedCategory]);
 
   const handleSearch = (subject: string) => {
     setSearchQuery(subject);
@@ -36,28 +49,29 @@ export default function IssuesScreen() {
     setSearchedIssues(filtered);
   };
 
-  const handleFilter = (filter: string) => {
-    // dispatch(setFilter(filter));
-    console.log("works");
+  const handleFilter = (category: string) => {
+    setSelectedCategory(category);
   };
 
-  const issues = searchQuery ? searchedIssues : allIssues;
-  const filterButtons = [
-    "Bathroom",
-    "Kitchen",
-    "Parsites",
-    "Heating",
-    "Keys/Entrance",
-    "Other",
-  ];
+  const issues = searchedIssues.length > 0 ? searchedIssues : allIssues;
+
+  const categoryMapping: { [key: string]: string | null } = {
+    All: null,
+    Kitchen: "Kitchen",
+    Bathroom: "Bathroom",
+    Parasites: "Parasites",
+    Heating: "Heating",
+    "Keys/Entrance": "Keys/Entrance",
+    Other: "Other",
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
       <View style={styles.rootContainer}>
-        {/* <Text style={styles.pageTitle}>Possible Issues</Text> */}
         <View style={styles.container}>
           <TextInput
             style={styles.input}
-            placeholder="Look for issues"
+            placeholder="Search for issues"
             value={searchQuery}
             onChangeText={handleSearch}
           />
@@ -77,27 +91,33 @@ export default function IssuesScreen() {
           contentContainerStyle={styles.filterContainer}
           showsHorizontalScrollIndicator={false}
         >
-          {filterButtons.map((filterButton, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.filterButton,
-                filter === filterButton && styles.activeFilterButton,
-              ]}
-              onPress={() => handleFilter(filterButton)}
-            >
-              <Text
+          {Object.keys(categoryMapping).map((category, index) => {
+            const isActive =
+              (category === "All" && selectedCategory === null) ||
+              category === selectedCategory;
+            return (
+              <TouchableOpacity
+                key={index}
                 style={[
-                  styles.filterButtonText,
-                  filter === filterButton && styles.activeFilterButtonText,
+                  styles.filterButton,
+                  isActive && styles.activeFilterButton,
                 ]}
+                onPress={() => handleFilter(category)}
               >
-                {filterButton}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text
+                  style={[
+                    styles.filterButtonText,
+                    isActive && styles.activeFilterButton,
+                  ]}
+                >
+                  {category}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
-        {issues.map((item) => (
+
+        {filteredIssues.map((item) => (
           <View key={item.id} style={styles.cardContainer}>
             <View style={styles.imageContainer}>
               {item.imageUrl ? (
@@ -109,6 +129,7 @@ export default function IssuesScreen() {
             <View style={styles.contentContainer}>
               <Text style={styles.h2}>{item.subject}</Text>
               <Text style={styles.text}>{item.description}</Text>
+              <Text style={styles.text}>{item.category.name}</Text>
             </View>
           </View>
         ))}
@@ -116,14 +137,15 @@ export default function IssuesScreen() {
     </ScrollView>
   );
 }
+
 const screen = Dimensions.get("window");
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "white",
   },
   scrollViewContentContainer: {
-    flexGrow: 1,
+    // flexGrow
   },
   pageTitle: {
     fontSize: 30,
@@ -198,12 +220,12 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   filterContainer: {
-    flexGrow: 1,
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
     marginVertical: 10,
     paddingHorizontal: 10,
+    flexWrap: "wrap",
   },
   filterButton: {
     backgroundColor: "#101828",
