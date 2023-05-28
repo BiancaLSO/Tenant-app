@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { fetchUserData } from "../redux/users/usersSlice";
 import { NavigationProp } from "@react-navigation/native";
+import { IssueEntity } from "../redux/issue/issueEntity";
+import { ScrollView } from "react-native-gesture-handler";
 
 type RootStackParamList = {
   EditProfile: undefined;
@@ -23,6 +25,10 @@ export default function Profile({ navigation }: MainProps) {
   const user: UsersEntity | null = useSelector(
     (state: RootState) => state.users.user
   );
+  const userIssues: IssueEntity[] = useSelector(
+    (state: RootState) => state.issue.userIssues
+  );
+
   const dispatch = useDispatch<AppDispatch>();
   const [userInfo, setUserInfo] = useState({});
   const [apartmentInfo, setApartmentInfo] = useState({
@@ -65,7 +71,7 @@ export default function Profile({ navigation }: MainProps) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {user ? (
         <>
           <View style={styles.user}>
@@ -119,19 +125,40 @@ export default function Profile({ navigation }: MainProps) {
               <></>
             )}
           </View>
+          <View>
+            <Text style={styles.myIssuesTitle}>
+              My issues ({userIssues?.length})
+            </Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              marginVertical: 10,
+            }}
+          >
+            {userIssues?.map((issue) => (
+              <View key={issue.id} style={styles.categoryItem}>
+                <Text style={styles.detailsTitle}>{issue.subject}</Text>
+                <Text style={styles.detailsInfo}>{issue.description}</Text>
+              </View>
+            ))}
+          </View>
         </>
       ) : (
         <Text>Loading profile...</Text>
       )}
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column",
+    padding: 20,
   },
   imgProfile: {
     marginTop: 30,
@@ -194,5 +221,21 @@ const styles = StyleSheet.create({
   icons: {
     textAlign: "center",
     marginTop: 5,
+  },
+  myIssuesTitle: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    fontWeight: "500",
+    fontSize: 14,
+    color: "#101828",
+  },
+  categoryItem: {
+    justifyContent: "center",
+    width: 353,
+    height: 60,
+    backgroundColor: "#E4E7EC",
+    borderRadius: 10,
+    margin: 5,
+    padding: 14,
   },
 });
