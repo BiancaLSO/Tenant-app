@@ -75,7 +75,7 @@ export default function ChooseCategory({ navigation }: MainProps) {
         </View>
       );
     } else if (selectedTabIndex === 1) {
-      return <View style={{ display: "flex", flexDirection: "column", justifyContent: "center", marginVertical: 10 }}>{userIssues?.map(renderIssueCard)}</View>;
+      return <View style={{ display: "flex", flexDirection: "column", justifyContent: "center", marginVertical: 10 }}>{userIssues ? userIssues?.map(renderIssueCard) : <></>}</View>;
     }
   };
 
