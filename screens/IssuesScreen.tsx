@@ -78,81 +78,80 @@ export default function IssuesScreen({ navigation }: MainProps) {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-      <View style={styles.rootContainer}>
-        <TouchableOpacity
-          style={styles.createButton}
-          onPress={handleCreateIssue}
-        >
-          <Text style={styles.createButtonText}>Create an issue</Text>
-        </TouchableOpacity>
-        <View style={styles.container}>
-          <TextInput
-            style={styles.input}
-            placeholder="Search for issues"
-            value={searchQuery}
-            onChangeText={handleSearch}
-          />
-          <View style={styles.iconContainer}>
-            <Feather
-              name="search"
-              size={20}
-              color="black"
-              style={styles.icon}
-              onPress={() => handleSearch(searchQuery)}
+    <>
+      <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+        <View style={styles.rootContainer}>
+          <View style={styles.container}>
+            <TextInput
+              style={styles.input}
+              placeholder="Search for issues"
+              value={searchQuery}
+              onChangeText={handleSearch}
             />
+            <View style={styles.iconContainer}>
+              <Feather
+                name="search"
+                size={20}
+                color="black"
+                style={styles.icon}
+                onPress={() => handleSearch(searchQuery)}
+              />
+            </View>
           </View>
-        </View>
 
-        <ScrollView
-          horizontal
-          contentContainerStyle={styles.filterContainer}
-          showsHorizontalScrollIndicator={false}
-        >
-          {Object.keys(categoryMapping).map((category, index) => {
-            const isActive =
-              (category === "All" && selectedCategory === null) ||
-              category === selectedCategory;
-            return (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.filterButton,
-                  isActive && styles.activeFilterButton,
-                ]}
-                onPress={() => handleFilter(category)}
-              >
-                <Text
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.filterContainer}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Object.keys(categoryMapping).map((category, index) => {
+              const isActive =
+                (category === "All" && selectedCategory === null) ||
+                category === selectedCategory;
+              return (
+                <TouchableOpacity
+                  key={index}
                   style={[
-                    styles.filterButtonText,
+                    styles.filterButton,
                     isActive && styles.activeFilterButton,
                   ]}
+                  onPress={() => handleFilter(category)}
                 >
-                  {category}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+                  <Text
+                    style={[
+                      styles.filterButtonText,
+                      isActive && styles.activeFilterButton,
+                    ]}
+                  >
+                    {category}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
 
-        {issues.map((item) => (
-          <View key={item.id} style={styles.cardContainer}>
-            <View style={styles.imageContainer}>
-              {item.imageUrl ? (
-                <Image source={{ uri: item.imageUrl }} style={styles.image} />
-              ) : (
-                <Text>No Image</Text>
-              )}
+          {issues.map((item) => (
+            <View key={item.id} style={styles.cardContainer}>
+              <View style={styles.imageContainer}>
+                {item.imageUrl ? (
+                  <Image source={{ uri: item.imageUrl }} style={styles.image} />
+                ) : (
+                  <Text>No Image</Text>
+                )}
+              </View>
+              <View style={styles.contentContainer}>
+                <Text style={styles.h2}>{item.subject}</Text>
+                <Text style={styles.text}>{item.description}</Text>
+                {/* <Text style={styles.text}>{item.category.name}</Text> */}
+              </View>
             </View>
-            <View style={styles.contentContainer}>
-              <Text style={styles.h2}>{item.subject}</Text>
-              <Text style={styles.text}>{item.description}</Text>
-              {/* <Text style={styles.text}>{item.category.name}</Text> */}
-            </View>
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+          ))}
+        </View>
+      </ScrollView>
+      <TouchableOpacity style={styles.createButton} onPress={handleCreateIssue}>
+        <Text style={styles.createButtonText}>+</Text>
+      </TouchableOpacity>
+    </>
   );
 }
 
@@ -231,7 +230,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   container: {
-    marginTop: 80,
+    marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
@@ -266,19 +265,18 @@ const styles = StyleSheet.create({
   createButton: {
     backgroundColor: "#A5ED7B",
     position: "absolute",
-    top: 20,
+    bottom: 20,
     right: 20,
-    // borderRadius: 20,
+    borderRadius: 25,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    marginBottom: 30,
-    width: 152,
-    zIndex: 1, // Set a higher z-index to bring the button forward
+    width: 50,
+    zIndex: 1, //  Set a higher z-index to bring the button forward
   },
 
   createButtonText: {
-    color: "white",
-    fontSize: 16,
+    color: "#101828",
+    fontSize: 30,
     fontWeight: "bold",
   },
 });
