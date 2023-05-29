@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../store";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, Image } from "react-native";
 import { login, logout, updateToken } from "../redux/users/usersSlice";
 import { UsersEntity } from "../redux/users/usersEntity";
 import * as SecureStore from "expo-secure-store";
@@ -17,6 +9,7 @@ import { NavigationProp } from "@react-navigation/native";
 
 type RootStackParamList = {
   Home: undefined;
+  Signup: undefined;
 };
 
 type MainProps = {
@@ -24,12 +17,8 @@ type MainProps = {
 };
 
 export function Login({ navigation }: MainProps) {
-  const token: string | undefined | null = useSelector(
-    (state: RootState) => state.users.token
-  );
-  const error: string | undefined = useSelector(
-    (state: RootState) => state.users.error
-  );
+  const token: string | undefined | null = useSelector((state: RootState) => state.users.token);
+  const error: string | undefined = useSelector((state: RootState) => state.users.error);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -72,6 +61,10 @@ export function Login({ navigation }: MainProps) {
     console.log("You are logged out");
   };
 
+  const handleNavigateSignup = () => {
+    navigation.navigate("Signup");
+  };
+
   useEffect(() => {
     const asyncFunc = async () => {
       const token = await SecureStore.getItemAsync("token");
@@ -96,9 +89,7 @@ export function Login({ navigation }: MainProps) {
       ) : (
         <>
           <Text style={styles.title}>Log ind</Text>
-          <Text style={styles.paragraph}>
-            Welcome back! Please enter your details.
-          </Text>
+          <Text style={styles.paragraph}>Welcome back! Please enter your details.</Text>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Email</Text>
             <TextInput
@@ -110,9 +101,7 @@ export function Login({ navigation }: MainProps) {
               }}
               value={email.toLowerCase()}
             />
-            {emailError !== "" && (
-              <Text style={styles.error}>{emailError}</Text>
-            )}
+            {emailError !== "" && <Text style={styles.error}>{emailError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Password</Text>
@@ -126,20 +115,24 @@ export function Login({ navigation }: MainProps) {
               }}
               value={password}
             />
-            {passwordError !== "" && (
-              <Text style={styles.error}>{passwordError}</Text>
-            )}
+            {passwordError !== "" && <Text style={styles.error}>{passwordError}</Text>}
           </View>
 
           <TouchableOpacity style={styles.button} onPress={handleLoginSuccess}>
-            <Text style={styles.buttonText}>Log ind</Text>
+            <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
+          <View style={{ display: "flex", flexDirection: "row" }}>
+            <Text style={styles.noAcc}>You do not have an account yet?</Text>
+            <TouchableOpacity style={{ height: 50 }} onPress={handleNavigateSignup}>
+              <Text style={styles.link}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
         </>
       )}
 
       {token && (
         <TouchableOpacity style={styles.button} onPress={handleLogout}>
-          <Text style={styles.buttonText}>Log ud</Text>
+          <Text style={styles.buttonText}>Log out</Text>
         </TouchableOpacity>
       )}
 
@@ -194,6 +187,18 @@ const styles = StyleSheet.create({
     color: "#101828",
     marginBottom: 10,
   },
+  noAcc: {
+    fontSize: 16,
+    color: "#101828",
+    marginTop: 30,
+  },
+  link: {
+    fontSize: 16,
+    color: "#101828",
+    marginTop: 30,
+    marginLeft: 5,
+    textDecorationLine: "underline",
+  },
   input: {
     width: screen.width - 40,
     height: 50,
@@ -219,9 +224,8 @@ const styles = StyleSheet.create({
   rectangle: {
     position: "absolute",
     left: "40%",
-    // right: "-10.27%",
     top: "61%",
-    // bottom: "-14.58%",
+    zIndex: -1,
   },
   error: {
     color: "red",

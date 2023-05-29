@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  Image,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, Dimensions, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { SignUpUser } from "../redux/users/signupuserEntity";
@@ -26,9 +17,7 @@ type MainProps = {
 export function Signup({ navigation }: MainProps) {
   const [showFormTenant, setShowFormTenant] = useState(false);
   const [showFormBoard, setShowFormBoard] = useState(false);
-  const error: string | undefined = useSelector(
-    (state: RootState) => state.users.error
-  );
+  const error: string | undefined = useSelector((state: RootState) => state.users.error);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -49,13 +38,7 @@ export function Signup({ navigation }: MainProps) {
   const [phoneError, setPhoneError] = useState("");
 
   const validateForm = () => {
-    if (
-      !email ||
-      (!password && password.length > 4) ||
-      !firstName ||
-      !lastName ||
-      !phone
-    ) {
+    if (!email || (!password && password.length > 4) || !firstName || !lastName || !phone) {
       setEmailError("Email is required.");
       setPasswordError("Please enter a password with at least 4 characters.");
       setFirstNameError("First name is required.");
@@ -96,18 +79,7 @@ export function Signup({ navigation }: MainProps) {
     }
 
     try {
-      const action = await dispatch(
-        signupTenant(
-          new SignUpUser(
-            email,
-            password,
-            firstName,
-            lastName,
-            phone,
-            roleTenant
-          )
-        )
-      );
+      const action = await dispatch(signupTenant(new SignUpUser(email, password, firstName, lastName, phone, roleTenant)));
       if (action.payload && !action.payload.error) {
         clearFieldErrors();
         navigation.navigate("Login");
@@ -130,11 +102,7 @@ export function Signup({ navigation }: MainProps) {
     }
 
     try {
-      const action = await dispatch(
-        signupBoard(
-          new SignUpUser(email, password, firstName, lastName, phone, roleBoard)
-        )
-      );
+      const action = await dispatch(signupBoard(new SignUpUser(email, password, firstName, lastName, phone, roleBoard)));
       if (action.payload && !action.payload.error) {
         clearFieldErrors();
         navigation.navigate("Login");
@@ -163,23 +131,34 @@ export function Signup({ navigation }: MainProps) {
     setShowFormTenant(false);
     setShowFormBoard(false);
   };
+  const handleNavigateLogIn = () => {
+    navigation.navigate("Login");
+  };
 
   if (!showFormTenant && !showFormBoard) {
     return (
-      <View style={styles.containerModal}>
-        <Text style={styles.question}>Are you a tenant or a board member?</Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleYesClick}>
-            <Text style={styles.buttonText}>Tenant</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleNoClick}>
-            <Text style={styles.buttonText}>Board member</Text>
-          </TouchableOpacity>
+      <>
+        <View style={styles.containerModal}>
+          <Text style={styles.question}>Are you a tenant or a board member?</Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={handleYesClick}>
+              <Text style={styles.buttonText}>Tenant</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleNoClick}>
+              <Text style={styles.buttonText}>Board member</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.rectangle}>
+            <Image source={require("../redux/users/assets/Rectangle.png")} />
+          </View>
+          <View style={{ display: "flex", flexDirection: "row" }}>
+            <Text style={styles.noAcc}>Do you already have an account?</Text>
+            <TouchableOpacity style={{ height: 50 }} onPress={handleNavigateLogIn}>
+              <Text style={styles.link}>Log in</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.rectangle}>
-          <Image source={require("../redux/users/assets/Rectangle.png")} />
-        </View>
-      </View>
+      </>
     );
   }
   if (showFormTenant) {
@@ -187,15 +166,10 @@ export function Signup({ navigation }: MainProps) {
       <ScrollView contentContainerStyle={styles.container}>
         <>
           <View style={styles.containerFlex}>
-            <TouchableOpacity
-              onPress={handleGoBack}
-              style={styles.goBackButton}
-            >
+            <TouchableOpacity onPress={handleGoBack} style={styles.goBackButton}>
               <Image source={require("../assets/Icon.png")} />
             </TouchableOpacity>
-            <Text style={styles.paragraph}>
-              Welcome! Please enter your details.
-            </Text>
+            <Text style={styles.paragraph}>Welcome! Please enter your details.</Text>
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Email</Text>
@@ -208,9 +182,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={email.toLowerCase()}
             />
-            {emailError !== "" && (
-              <Text style={styles.error}>{emailError}</Text>
-            )}
+            {emailError !== "" && <Text style={styles.error}>{emailError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Password</Text>
@@ -224,9 +196,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={password}
             />
-            {passwordError !== "" && (
-              <Text style={styles.error}>{passwordError}</Text>
-            )}
+            {passwordError !== "" && <Text style={styles.error}>{passwordError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>First name</Text>
@@ -239,9 +209,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={firstName}
             />
-            {firstNameError !== "" && (
-              <Text style={styles.error}>{firstNameError}</Text>
-            )}
+            {firstNameError !== "" && <Text style={styles.error}>{firstNameError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Last name</Text>
@@ -254,9 +222,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={lastName}
             />
-            {lastNameError !== "" && (
-              <Text style={styles.error}>{lastNameError}</Text>
-            )}
+            {lastNameError !== "" && <Text style={styles.error}>{lastNameError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Phone</Text>
@@ -269,9 +235,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={phone}
             />
-            {phoneError !== "" && (
-              <Text style={styles.error}>{phoneError}</Text>
-            )}
+            {phoneError !== "" && <Text style={styles.error}>{phoneError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Role</Text>
@@ -298,15 +262,10 @@ export function Signup({ navigation }: MainProps) {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.innerContainer}>
           <View style={styles.containerFlex}>
-            <TouchableOpacity
-              onPress={handleGoBack}
-              style={styles.goBackButton}
-            >
+            <TouchableOpacity onPress={handleGoBack} style={styles.goBackButton}>
               <Image source={require("../assets/Icon.png")} />
             </TouchableOpacity>
-            <Text style={styles.paragraph}>
-              Welcome! Please enter your details.
-            </Text>
+            <Text style={styles.paragraph}>Welcome! Please enter your details.</Text>
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Email</Text>
@@ -319,9 +278,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={email.toLowerCase()}
             />
-            {emailError !== "" && (
-              <Text style={styles.error}>{emailError}</Text>
-            )}
+            {emailError !== "" && <Text style={styles.error}>{emailError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Password</Text>
@@ -335,9 +292,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={password}
             />
-            {passwordError !== "" && (
-              <Text style={styles.error}>{passwordError}</Text>
-            )}
+            {passwordError !== "" && <Text style={styles.error}>{passwordError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>First name</Text>
@@ -350,9 +305,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={firstName}
             />
-            {firstNameError !== "" && (
-              <Text style={styles.error}>{firstNameError}</Text>
-            )}
+            {firstNameError !== "" && <Text style={styles.error}>{firstNameError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Last name</Text>
@@ -365,9 +318,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={lastName}
             />
-            {lastNameError !== "" && (
-              <Text style={styles.error}>{lastNameError}</Text>
-            )}
+            {lastNameError !== "" && <Text style={styles.error}>{lastNameError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Phone</Text>
@@ -380,9 +331,7 @@ export function Signup({ navigation }: MainProps) {
               }}
               value={phone}
             />
-            {phoneError !== "" && (
-              <Text style={styles.error}>{phoneError}</Text>
-            )}
+            {phoneError !== "" && <Text style={styles.error}>{phoneError}</Text>}
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Role</Text>
@@ -411,8 +360,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    // paddingBottom: 500, // Adjust this value as needed
-    // marginBottom: 20,
   },
   innerContainer: {
     flex: 1,
@@ -517,9 +464,8 @@ const styles = StyleSheet.create({
   rectangle: {
     position: "absolute",
     left: "40%",
-    // right: "-10.27%",
     top: "57%",
-    // bottom: "-14.58%",
+    zIndex: -1,
   },
   extraSpace: {
     height: 100,
@@ -533,5 +479,17 @@ const styles = StyleSheet.create({
     color: "red",
     fontWeight: "900",
     textAlign: "left",
+  },
+  noAcc: {
+    fontSize: 16,
+    color: "#101828",
+    marginTop: 10,
+  },
+  link: {
+    fontSize: 16,
+    color: "#101828",
+    marginTop: 10,
+    marginLeft: 5,
+    textDecorationLine: "underline",
   },
 });
