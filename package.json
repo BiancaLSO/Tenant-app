@@ -14,7 +14,7 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@reduxjs/toolkit": "^1.9.5",
-    "@tanstack/react-query": "^4.29.5",
+    "@tanstack/react-query": "^4.29.12",
     "axios": "^1.4.0",
     "expo": "~48.0.15",
     "expo-camera": "~13.2.1",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@tanstack/eslint-plugin-query": "^4.29.9",
     "@types/react": "~18.0.14",
     "@types/react-native": "^0.72.0",
     "@types/react-native-vector-icons": "^6.4.13",

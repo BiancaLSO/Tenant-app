@@ -6,6 +6,7 @@ import * as SecureStore from "expo-secure-store";
 import { RootState } from "../../store";
 import { UsersEntity } from "../users/usersEntity";
 import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
 
 export class IssueAPI {
   static myIp: string = myIp;
@@ -37,12 +38,13 @@ export class IssueAPI {
   }
 
   static async fetchAllIssues() {
+    const url = `http://${this.myIp}:3000/issues`;
     try {
-      const result = await axios.get("http://" + this.myIp + ":3000/issues");
-
+      const result = await axios.get(url);
       return result.data;
     } catch (error) {
       console.log("error", error);
+      throw error;
     }
   }
 

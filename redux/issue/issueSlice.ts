@@ -11,6 +11,7 @@ export const fetchAllIssues = createAsyncThunk(
     return response;
   }
 );
+
 export const fetchUserIssues = createAsyncThunk(
   "issue/fetchUserIssues",
   async (userId: number | undefined) => {
