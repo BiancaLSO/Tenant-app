@@ -62,7 +62,7 @@ export default function IssuesScreen({ navigation }: MainProps) {
     navigation.navigate("ChooseCategory");
   };
 
-  const handleDeleteIssue = (id: number | null) => {
+  const handleDeleteIssue = (id: number | undefined) => {
     dispatch(deleteIssue(id));
   };
 
@@ -82,13 +82,12 @@ export default function IssuesScreen({ navigation }: MainProps) {
       <View style={styles.contentContainer}>
         <Text style={styles.h2}>{item.subject}</Text>
         <Text style={styles.text}>{item.description}</Text>
-        {/* <Text style={styles.text}>{item.category.name}</Text> */}
       </View>
       <TouchableOpacity
         style={styles.deleteButton}
         onPress={() => handleDeleteIssue(item.id)}
       >
-        <Text style={styles.deleteButtonText}>Delete Issue</Text>
+        <Feather name="trash-2" size={24} color="white"></Feather>
       </TouchableOpacity>
     </View>
   );
@@ -296,10 +295,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   deleteButton: {
-    backgroundColor: "red",
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 5,
+    backgroundColor: "#101828",
+    paddingHorizontal: 12,
+    borderRadius: 25,
+    paddingVertical: 12,
     marginLeft: 10,
   },
   deleteButtonText: {

@@ -55,7 +55,7 @@ export const fetchFilteredIssues = createAsyncThunk(
 
 export const deleteIssue = createAsyncThunk(
   "issues/deleteIssue",
-  async (id: number | null) => {
+  async (id: number | undefined) => {
     try {
       const response = await IssueAPI.deleteIssue(id);
       return response;

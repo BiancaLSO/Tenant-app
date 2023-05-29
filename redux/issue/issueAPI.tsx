@@ -82,7 +82,7 @@ export class IssueAPI {
       console.log("error", error);
     }
   }
-  static async deleteIssue(id: number | null) {
+  static async deleteIssue(id: number | undefined) {
     const url = `http://${this.myIp}:3000/issues/${id}`;
     try {
       const result = await axios.delete(url);
