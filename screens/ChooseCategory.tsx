@@ -38,7 +38,7 @@ export default function ChooseCategory({ navigation }: MainProps) {
   }, [user]);
   useEffect(() => {
     dispatch(fetchUserIssues(userId));
-  }, [userId]);
+  }, [userId, userIssues]);
 
   const handleChooseCategory = (category: CategoryEntity) => {
     dispatch(setSelectedCategory(category));
