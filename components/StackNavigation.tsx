@@ -11,6 +11,16 @@ import { Login } from "../screens/login";
 import { Signup } from "../screens/Signup";
 import EditProfile from "../screens/EditProfile";
 import { DeleteProfile } from "../screens/DeleteProfile";
+import IssuesScreen from "../screens/IssuesScreen";
+
+// After we merge, you can add here the screens which
+// will contian stack navigation such as SignUp or LogIn
+
+// export type StackMain = {
+//   Bookings: undefined;
+//   Edit: { booking: BookingEntity };
+//   Delete: { booking: BookingEntity };
+// };
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +60,7 @@ export default function StackNavigation() {
       />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="Issues" component={IssuesScreen} />
     </Stack.Navigator>
   );
 }
