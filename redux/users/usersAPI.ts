@@ -25,14 +25,6 @@ export class UsersAPI {
     }
   }
   static async signupBoard(user: SignUpUser) {
-    // try {
-    //   const result = await axios.post("http://" + this.ip + ":3000/auth/signupboardmember", user);
-    //   console.log("back from server", result.data);
-
-    //   return result.data;
-    // } catch (error) {
-    //   console.log("nope");
-    // }
     try {
       const result = await axios.post(
         "http://" + this.ip + ":3000/auth/signupboardmember",
@@ -42,15 +34,13 @@ export class UsersAPI {
 
       return result.data;
     } catch (error: any) {
-      const errorResponse = error.response.data;
-      const errorMessage =
-        errorResponse.message || "Sign-up failed. Please try again.";
+      const errorResponse = `bulshit ${error.response.data}`;
+      const errorMessage = errorResponse || "Sign-up failed. Please try again.";
       throw new Error(errorMessage);
     }
   }
 
   static async login(user: UsersEntity) {
-    // try {
     const result = await axios.post(
       "http://" + this.ip + ":3000/auth/login",
       user
@@ -108,28 +98,11 @@ export class UsersAPI {
     }
   }
 
-  static async deleteTenant(id: number | null, token: string | null) {
-    const url = `http://` + this.ip + `:3000/users/tenant/${id}`;
-    try {
-      const result = await axios.delete(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return result.data;
-    } catch (error) {
-      console.log("This error is from the UsersAPI deleteTenant " + error);
-    }
-  }
-
-  static async deleteUser(id: number | null, token: string | null) {
+  static async deleteUser(id: number | null) {
     const url = `http://` + this.ip + `:3000/users/${id}`;
     try {
-      const result = await axios.delete(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const result = await axios.delete(url);
+      console.log("This is the result.data from userApi ", result.data);
       return result.data;
     } catch (error) {
       console.log("This error is from the UsersAPI deleteUser " + error);

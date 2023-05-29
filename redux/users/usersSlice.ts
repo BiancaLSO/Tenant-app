@@ -52,7 +52,6 @@ export const fetchUserData = createAsyncThunk(
       const token: string | null = await SecureStore.getItemAsync("token");
 
       const response = await UsersAPI.fetchUserData(id, token);
-      console.log("Response form slice", response);
       return response;
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -83,18 +82,13 @@ export const updateUser = createAsyncThunk(
 
 export const deleteUser = createAsyncThunk(
   "users/deleteUser",
-  async (thunkAPI) => {
+  async (id: number, thunkAPI) => {
     try {
-      // Get id from SecureStorage
-      const idString: string | null = await SecureStore.getItemAsync("id");
-      const id: number | null = idString ? JSON.parse(idString) : null;
-      // Get token
-      const token: string | null = await SecureStore.getItemAsync("token");
+      const response = await UsersAPI.deleteUser(id);
 
-      const response = await UsersAPI.deleteUser(id, token);
       return response;
     } catch (error) {
-      console.error("Error updating user data:", error);
+      console.error("Error deleting user data:", error);
       throw error;
     }
   }

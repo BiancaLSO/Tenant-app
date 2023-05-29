@@ -1,10 +1,11 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
 import { deleteUser } from "../redux/users/usersSlice";
+import { UsersEntity } from "../redux/users/usersEntity";
+import { useState } from "react";
 
 type RootStackParamList = {
   Signup: undefined;
@@ -16,13 +17,19 @@ type MainProps = {
 };
 
 export function DeleteProfile({ navigation }: MainProps) {
+  const user: UsersEntity | null = useSelector(
+    (state: RootState) => state.users.user
+  );
+  const [userId, setUserId] = useState(user ? user.id : 0);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleDelete = () => {
-    console.log("Deleted");
-    dispatch(deleteUser());
-    // handleGoBack();
-    navigation.navigate("Signup");
+    if (userId) {
+      dispatch(deleteUser(userId));
+      navigation.navigate("Signup");
+    } else {
+      console.log("Error");
+    }
   };
 
   const handleGoBack = () => {
@@ -31,7 +38,6 @@ export function DeleteProfile({ navigation }: MainProps) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* <View style={styles.container}> */}
       <Text style={styles.question}>
         Are you sure you want to delete your account?
       </Text>
@@ -43,7 +49,6 @@ export function DeleteProfile({ navigation }: MainProps) {
           <Text style={styles.buttonText}>No</Text>
         </TouchableOpacity>
       </View>
-      {/* </View> */}
     </ScrollView>
   );
 }

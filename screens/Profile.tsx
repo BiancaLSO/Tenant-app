@@ -8,7 +8,8 @@ import { fetchUserData } from "../redux/users/usersSlice";
 import { NavigationProp } from "@react-navigation/native";
 import { IssueEntity } from "../redux/issue/issueEntity";
 import { ScrollView } from "react-native-gesture-handler";
-import { fetchAllIssues, fetchUserIssues } from "../redux/issue/issueSlice";
+import { Feather } from "@expo/vector-icons";
+import { deleteIssue, fetchUserIssues } from "../redux/issue/issueSlice";
 
 type RootStackParamList = {
   EditProfile: undefined;
@@ -51,6 +52,10 @@ export default function Profile({ navigation }: MainProps) {
     navigation.navigate("DeleteProfile");
   };
 
+  const handleDeleteIssue = (id: number | undefined) => {
+    dispatch(deleteIssue(id));
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -78,7 +83,29 @@ export default function Profile({ navigation }: MainProps) {
 
   useEffect(() => {
     dispatch(fetchUserIssues(userId));
-  }, [userId]);
+  }, [userId, userIssues]);
+
+  const renderIssueCard = (item: IssueEntity) => (
+    <View key={item.id} style={styles.cardContainer}>
+      <View style={styles.imageContainer}>
+        {item.imageUrl ? (
+          <Image source={{ uri: item.imageUrl }} style={styles.image} />
+        ) : (
+          <View></View>
+        )}
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.h2}>{item.subject}</Text>
+        <Text style={styles.text}>{item.description}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeleteIssue(item.id)}
+      >
+        <Feather name="trash-2" size={24} color="white"></Feather>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -152,14 +179,8 @@ export default function Profile({ navigation }: MainProps) {
               justifyContent: "center",
               marginVertical: 10,
             }}
-          >
-            {userIssues?.map((issue) => (
-              <View key={issue.id} style={styles.categoryItem}>
-                <Text style={styles.detailsTitle}>{issue.subject}</Text>
-                <Text style={styles.detailsInfo}>{issue.description}</Text>
-              </View>
-            ))}
-          </View>
+          ></View>
+          {userIssues ? userIssues.map(renderIssueCard) : <></>}
         </>
       ) : (
         <Text>Loading profile...</Text>
@@ -172,7 +193,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
   },
   imgProfile: {
     marginTop: 30,
@@ -199,7 +219,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 353,
     height: 60,
-    backgroundColor: "#E4E7EC",
+    backgroundColor: "#d7d7d7",
+
     borderRadius: 5,
     margin: 5,
     padding: 14,
@@ -238,19 +259,51 @@ const styles = StyleSheet.create({
   },
   myIssuesTitle: {
     paddingHorizontal: 20,
-    paddingTop: 15,
+    marginTop: 20,
+    paddingStart: 25,
     fontWeight: "600",
     fontSize: 20,
     lineHeight: 50,
     color: "#101828",
   },
-  categoryItem: {
-    justifyContent: "center",
-    width: 353,
-    height: 60,
-    backgroundColor: "#E4E7EC",
+  cardContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 25,
+    marginVertical: 10,
+    backgroundColor: "#d7d7d7",
     borderRadius: 10,
-    margin: 5,
-    padding: 14,
+    padding: 10,
+  },
+  imageContainer: {
+    marginRight: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 5,
+  },
+  contentContainer: {
+    flex: 1,
+  },
+  h2: {
+    color: "#0B1F2F",
+    fontSize: 25,
+    fontWeight: "500",
+    marginTop: 15,
+  },
+  text: {
+    color: "#0B1F2F",
+    fontSize: 17,
+  },
+  deleteButton: {
+    backgroundColor: "#101828",
+    paddingHorizontal: 12,
+    borderRadius: 25,
+    paddingVertical: 12,
+    marginLeft: 10,
+  },
+  deleteButtonText: {
+    color: "white",
   },
 });
