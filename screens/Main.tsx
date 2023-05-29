@@ -19,6 +19,7 @@ type RootStackParamList = {
   Profile: undefined;
   Login: undefined;
   Confirmation: undefined;
+  Issues: undefined;
 };
 
 type MainProps = {
@@ -38,6 +39,9 @@ export default function Main({ navigation }: MainProps) {
   };
   const handleNavigateProfile = () => {
     navigation.navigate("Profile");
+  };
+  const handleNavigateIssues = () => {
+    navigation.navigate("Issues");
   };
 
   return (
@@ -125,24 +129,26 @@ export default function Main({ navigation }: MainProps) {
             </View>
           </View>
         </TouchableOpacity>
-        <View style={styles.shortcutFlex}>
-          <Image
-            source={require("../assets/Beboerservice.png")}
-            style={styles.iconAdm}
-          />
-          <View style={styles.borderBottom}>
-            <View>
-              <Text style={styles.shorcutTitle}>Issues service</Text>
-              <Text style={styles.text2}>Defects, Repairs, Improveme...</Text>
-            </View>
-            <Feather
-              name="chevron-right"
-              style={styles.arrowRight}
-              size={30}
-              color="#000"
+        <TouchableOpacity onPress={handleNavigateIssues}>
+          <View style={styles.shortcutFlex}>
+            <Image
+              source={require("../assets/Beboerservice.png")}
+              style={styles.iconAdm}
             />
+            <View style={styles.borderBottom}>
+              <View>
+                <Text style={styles.shorcutTitle}>Issues service</Text>
+                <Text style={styles.text2}>Defects, Repairs, Improveme...</Text>
+              </View>
+              <Feather
+                name="chevron-right"
+                style={styles.arrowRight}
+                size={30}
+                color="#000"
+              />
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleNavigateProfile}>
           <View style={styles.shortcutFlex}>
             <Image
