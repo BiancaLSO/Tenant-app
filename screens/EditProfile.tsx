@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { useEffect, useState } from "react";
 import { fetchUserData, updateUser } from "../redux/users/usersSlice";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function EditProfile() {
   const user: UsersEntity | null = useSelector(
@@ -65,12 +65,14 @@ export default function EditProfile() {
           street: userFromProfile.payload.apartmentInfo.street,
         });
         setAddress({
-          id: apartmentInfo.id,
-          street: apartmentInfo.street,
-          apartment: apartmentInfo.apartment,
-          floor: apartmentInfo.floor,
-          region: apartmentInfo.region,
+          id: userFromProfile.payload.apartmentInfo.id,
+          street: userFromProfile.payload.apartmentInfo.street,
+          apartment: userFromProfile.payload.apartmentInfo.apartment,
+          floor: userFromProfile.payload.apartmentInfo.floor,
+          region: userFromProfile.payload.apartmentInfo.region,
         });
+        console.log(apartmentInfo);
+        console.log(address);
       } catch (error) {
         console.log("Error fetching data:", error);
       }

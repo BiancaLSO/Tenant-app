@@ -15,15 +15,14 @@ type MainProps = {
   navigation: NavigationProp<RootStackParamList, "Signup">;
 };
 
-export function DeleteProfile() {
+export function DeleteProfile({ navigation }: MainProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation();
 
   const handleDelete = () => {
     console.log("Deleted");
     dispatch(deleteUser());
-    handleGoBack();
-    //  navigation.navigate("Signup");
+    // handleGoBack();
+    navigation.navigate("Signup");
   };
 
   const handleGoBack = () => {

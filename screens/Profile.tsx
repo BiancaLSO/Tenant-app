@@ -8,6 +8,7 @@ import { fetchUserData } from "../redux/users/usersSlice";
 import { NavigationProp } from "@react-navigation/native";
 import { IssueEntity } from "../redux/issue/issueEntity";
 import { ScrollView } from "react-native-gesture-handler";
+import { fetchAllIssues, fetchUserIssues } from "../redux/issue/issueSlice";
 
 type RootStackParamList = {
   EditProfile: undefined;
@@ -30,6 +31,7 @@ export default function Profile({ navigation }: MainProps) {
   );
 
   const dispatch = useDispatch<AppDispatch>();
+  const [userId, setUserId] = useState<number | undefined>(0);
   const [userInfo, setUserInfo] = useState({});
   const [apartmentInfo, setApartmentInfo] = useState({
     allowPets: false,
@@ -70,6 +72,14 @@ export default function Profile({ navigation }: MainProps) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setUserId(user?.id);
+  }, [user]);
+
+  useEffect(() => {
+    dispatch(fetchUserIssues(userId));
+  }, [userId]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {user ? (
@@ -82,7 +92,11 @@ export default function Profile({ navigation }: MainProps) {
             <Text style={styles.name}>
               {user.firstName} {user.lastName}
             </Text>
-            <Text style={styles.typeOfUser}>{user.role}</Text>
+            <Text style={styles.typeOfUser}>
+              {user.role
+                ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+                : ""}
+            </Text>
           </View>
           <View style={styles.contact}>
             <TouchableOpacity style={styles.button} onPress={onEditPress}>
@@ -125,7 +139,7 @@ export default function Profile({ navigation }: MainProps) {
               <></>
             )}
           </View>
-          <View>
+          <View style={{ alignSelf: "flex-start" }}>
             <Text style={styles.myIssuesTitle}>
               My issues ({userIssues?.length})
             </Text>
@@ -224,9 +238,10 @@ const styles = StyleSheet.create({
   },
   myIssuesTitle: {
     paddingHorizontal: 20,
-    paddingVertical: 15,
-    fontWeight: "500",
-    fontSize: 14,
+    paddingTop: 15,
+    fontWeight: "600",
+    fontSize: 20,
+    lineHeight: 50,
     color: "#101828",
   },
   categoryItem: {
