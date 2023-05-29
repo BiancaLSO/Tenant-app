@@ -11,6 +11,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { Image, Dimensions } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
+// import Info from "../redux/info/InfoItem";
 import Info from "./Info";
 
 type RootStackParamList = {
@@ -27,13 +28,6 @@ type MainProps = {
 };
 
 export default function Main({ navigation }: MainProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = () => {
-    console.log("Search for:", searchQuery);
-    // add your search logic here
-  };
-
   const handleNavigateInfo = () => {
     navigation.navigate("Info");
   };

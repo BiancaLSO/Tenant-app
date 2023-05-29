@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput, TextStyle, TouchableOpacity, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { CategoryEntity } from "../redux/category/categoryEntity";
 import { fetchAllCategories, setSelectedCategory } from "../redux/category/categorySlice";
 import { IssueEntity } from "../redux/issue/issueEntity";
-import { fetchUserIssues } from "../redux/issue/issueSlice";
+import { deleteIssue, fetchUserIssues } from "../redux/issue/issueSlice";
 import { NavigationProp } from "@react-navigation/native";
 import { UsersEntity } from "../redux/users/usersEntity";
 import { fetchUserData } from "../redux/users/usersSlice";
+import { Feather } from "@expo/vector-icons";
 
 type RootStackParamList = {
   ChooseCategory: undefined;
@@ -37,7 +38,7 @@ export default function ChooseCategory({ navigation }: MainProps) {
   }, [user]);
   useEffect(() => {
     dispatch(fetchUserIssues(userId));
-  }, [userId]);
+  }, [userId, userIssues]);
 
   const handleChooseCategory = (category: CategoryEntity) => {
     dispatch(setSelectedCategory(category));
@@ -45,6 +46,22 @@ export default function ChooseCategory({ navigation }: MainProps) {
       navigation.navigate("CreateIssue");
     }
   };
+  const handleDeleteIssue = (id: number | undefined) => {
+    dispatch(deleteIssue(id));
+  };
+
+  const renderIssueCard = (item: IssueEntity) => (
+    <View key={item.id} style={styles.cardContainer}>
+      <View style={styles.imageContainer}>{item.imageUrl ? <Image source={{ uri: item.imageUrl }} style={styles.image} /> : <View></View>}</View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.h2}>{item.subject}</Text>
+        <Text style={styles.text}>{item.description}</Text>
+      </View>
+      <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteIssue(item.id)}>
+        <Feather name="trash-2" size={24} color="white"></Feather>
+      </TouchableOpacity>
+    </View>
+  );
 
   const renderContent = () => {
     if (selectedTabIndex === 0) {
@@ -58,16 +75,7 @@ export default function ChooseCategory({ navigation }: MainProps) {
         </View>
       );
     } else if (selectedTabIndex === 1) {
-      return (
-        <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", marginVertical: 10 }}>
-          {userIssues?.map((issue) => (
-            <View key={issue.id} style={styles.categoryItem}>
-              <Text style={styles.categoryButton}>{issue.subject}</Text>
-              <Text style={styles.categoryButton}>{issue.description}</Text>
-            </View>
-          ))}
-        </View>
-      );
+      return <View style={{ display: "flex", flexDirection: "column", justifyContent: "center", marginVertical: 10 }}>{userIssues ? userIssues?.map(renderIssueCard) : <></>}</View>;
     }
   };
 
@@ -155,5 +163,32 @@ const styles = StyleSheet.create({
     color: "#0B1F2F",
     fontSize: 20,
     fontWeight: "500",
+  },
+  cardContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 25,
+    marginVertical: 15,
+    backgroundColor: "#EFEFEF",
+    borderRadius: 10,
+    padding: 10,
+  },
+  imageContainer: {
+    marginRight: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 5,
+  },
+  contentContainer: {
+    flex: 1,
+  },
+  deleteButton: {
+    backgroundColor: "#101828",
+    paddingHorizontal: 12,
+    borderRadius: 25,
+    paddingVertical: 12,
+    marginLeft: 10,
   },
 });
