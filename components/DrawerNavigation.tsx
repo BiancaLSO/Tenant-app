@@ -9,6 +9,7 @@ import CreateIssue from "../screens/ChooseCategory";
 import ChooseCategory from "../screens/ChooseCategory";
 import Confirmation from "../screens/Confirmation";
 import IssuesScreen from "../screens/IssuesScreen";
+import { QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 
 const Drawer = createDrawerNavigator();
 

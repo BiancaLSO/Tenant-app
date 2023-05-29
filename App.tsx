@@ -1,21 +1,24 @@
 import "react-native-gesture-handler";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "./store";
-// import { QueryClient } from "@tanstack/react-query";
 import { NavigationContainer } from "@react-navigation/native";
 import TabNavigation from "./components/TabNavigation";
 import StackNavigation from "./components/StackNavigation";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-// const queryClient = new QueryClient()
+const queryClient = new QueryClient();
+
 export default function App() {
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <StackNavigation />
-        {/* <TabNavigation /> */}
-      </NavigationContainer>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <NavigationContainer>
+          <StackNavigation />
+        </NavigationContainer>
+      </Provider>
+    </QueryClientProvider>
   );
 }
 
