@@ -136,7 +136,7 @@ export default function IssuesScreen({ navigation }: MainProps) {
                 {item.imageUrl ? (
                   <Image source={{ uri: item.imageUrl }} style={styles.image} />
                 ) : (
-                  <Text>No Image</Text>
+                  <View></View>
                 )}
               </View>
               <View style={styles.contentContainer}>
