@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { myIp } from "../../components/consts";
+import { myIp } from "../../consts";
 
 // const baseUrl = 'http://localhost:3003'
 

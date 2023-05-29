@@ -31,6 +31,7 @@ export default function Profile({ navigation }: MainProps) {
     (state: RootState) => state.issue.userIssues
   );
 
+  const [role, setRole] = useState(user?.role === "admin" ?? "");
   const dispatch = useDispatch<AppDispatch>();
   const [userId, setUserId] = useState<number | undefined>(0);
   const [userInfo, setUserInfo] = useState({});
@@ -98,12 +99,16 @@ export default function Profile({ navigation }: MainProps) {
         <Text style={styles.h2}>{item.subject}</Text>
         <Text style={styles.text}>{item.description}</Text>
       </View>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => handleDeleteIssue(item.id)}
-      >
-        <Feather name="trash-2" size={24} color="white"></Feather>
-      </TouchableOpacity>
+      {role ? (
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDeleteIssue(item.id)}
+        >
+          <Feather name="trash-2" size={24} color="white"></Feather>
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
     </View>
   );
 
@@ -191,7 +196,7 @@ export default function Profile({ navigation }: MainProps) {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
   },
   imgProfile: {

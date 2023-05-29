@@ -2,7 +2,7 @@ import axios from "axios";
 import { Platform } from "react-native";
 import { UsersEntity } from "../users/usersEntity";
 import { SignUpUser } from "./signupuserEntity";
-import { myIp } from "../../components/consts";
+import { myIp } from "../../consts";
 
 export class UsersAPI {
   static baseUrl: string = Platform.OS === "ios" ? "localhost" : myIp;

@@ -17,6 +17,8 @@ import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "@react-navigation/native";
 import { deleteIssue } from "../redux/issue/issueSlice";
+import { UsersEntity } from "../redux/users/usersEntity";
+
 type RootStackParamList = {
   ChooseCategory: undefined;
 };
@@ -25,6 +27,11 @@ type MainProps = {
 };
 
 export default function IssuesScreen({ navigation }: MainProps) {
+  const user: UsersEntity | null = useSelector(
+    (state: RootState) => state.users.user
+  );
+  const [role, setRole] = useState(user?.role === "admin" ?? "");
+
   const allIssues: IssueEntity[] = useSelector(
     (state: RootState) => state.issue.issues
   );
@@ -83,12 +90,16 @@ export default function IssuesScreen({ navigation }: MainProps) {
         <Text style={styles.h2}>{item.subject}</Text>
         <Text style={styles.text}>{item.description}</Text>
       </View>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => handleDeleteIssue(item.id)}
-      >
-        <Feather name="trash-2" size={24} color="white"></Feather>
-      </TouchableOpacity>
+      {role ? (
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDeleteIssue(item.id)}
+        >
+          <Feather name="trash-2" size={24} color="white"></Feather>
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
     </View>
   );
 

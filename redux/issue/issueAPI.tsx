@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Platform } from "react-native";
 import { IssueEntity } from "./issueEntity";
-import { myIp } from "../../components/consts";
+import { myIp } from "../../consts";
 import * as SecureStore from "expo-secure-store";
 import { RootState } from "../../store";
 import { UsersEntity } from "../users/usersEntity";
