@@ -80,6 +80,12 @@ export default function EditProfile() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (user?.role) {
+      setRole(user.role.charAt(0).toUpperCase() + user.role.slice(1));
+    }
+  }, [user]);
+
   const onUpdatePress = () => {
     navigation.goBack();
   };
