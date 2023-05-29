@@ -16,6 +16,7 @@ import { fetchAllIssues, fetchFilteredIssues } from "../redux/issue/issueSlice";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "@react-navigation/native";
+import { deleteIssue } from "../redux/issue/issueSlice";
 type RootStackParamList = {
   ChooseCategory: undefined;
 };
@@ -57,6 +58,41 @@ export default function IssuesScreen({ navigation }: MainProps) {
     setSelectedCategory(category === "All" ? null : category);
   };
 
+  const handleCreateIssue = () => {
+    navigation.navigate("ChooseCategory");
+  };
+
+  const handleDeleteIssue = (id: number | null) => {
+    dispatch(deleteIssue(id));
+  };
+
+  useEffect(() => {
+    dispatch(fetchAllIssues());
+  }, [allIssues]);
+
+  const renderIssueCard = (item: IssueEntity) => (
+    <View key={item.id} style={styles.cardContainer}>
+      <View style={styles.imageContainer}>
+        {item.imageUrl ? (
+          <Image source={{ uri: item.imageUrl }} style={styles.image} />
+        ) : (
+          <View></View>
+        )}
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.h2}>{item.subject}</Text>
+        <Text style={styles.text}>{item.description}</Text>
+        {/* <Text style={styles.text}>{item.category.name}</Text> */}
+      </View>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeleteIssue(item.id)}
+      >
+        <Text style={styles.deleteButtonText}>Delete Issue</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   const issues = searchQuery
     ? searchedIssues
     : selectedCategory
@@ -71,10 +107,6 @@ export default function IssuesScreen({ navigation }: MainProps) {
     Heating: "Heating",
     "Keys/Entrance": "Keys/Entrance",
     Other: "Other",
-  };
-
-  const handleCreateIssue = () => {
-    navigation.navigate("ChooseCategory");
   };
 
   return (
@@ -130,22 +162,7 @@ export default function IssuesScreen({ navigation }: MainProps) {
             })}
           </ScrollView>
 
-          {issues.map((item) => (
-            <View key={item.id} style={styles.cardContainer}>
-              <View style={styles.imageContainer}>
-                {item.imageUrl ? (
-                  <Image source={{ uri: item.imageUrl }} style={styles.image} />
-                ) : (
-                  <View></View>
-                )}
-              </View>
-              <View style={styles.contentContainer}>
-                <Text style={styles.h2}>{item.subject}</Text>
-                <Text style={styles.text}>{item.description}</Text>
-                {/* <Text style={styles.text}>{item.category.name}</Text> */}
-              </View>
-            </View>
-          ))}
+          {issues.map(renderIssueCard)}
         </View>
       </ScrollView>
       <TouchableOpacity style={styles.createButton} onPress={handleCreateIssue}>
@@ -273,10 +290,19 @@ const styles = StyleSheet.create({
     width: 50,
     zIndex: 1, //  Set a higher z-index to bring the button forward
   },
-
   createButtonText: {
     color: "#101828",
     fontSize: 30,
     fontWeight: "bold",
+  },
+  deleteButton: {
+    backgroundColor: "red",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  deleteButtonText: {
+    color: "white",
   },
 });

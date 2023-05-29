@@ -82,4 +82,14 @@ export class IssueAPI {
       console.log("error", error);
     }
   }
+  static async deleteIssue(id: number | null) {
+    const url = `http://${this.myIp}:3000/issues/${id}`;
+    try {
+      const result = await axios.delete(url);
+      return result.data;
+    } catch (error) {
+      console.log(`Error deleting issue with ID ${id}:`, error);
+      throw error;
+    }
+  }
 }
