@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  TextInput,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, TextInput, Dimensions, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { IssueEntity } from "../redux/issue/issueEntity";
@@ -18,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "@react-navigation/native";
 import { deleteIssue } from "../redux/issue/issueSlice";
 import { UsersEntity } from "../redux/users/usersEntity";
+import { fetchUserData } from "../redux/users/usersSlice";
 
 type RootStackParamList = {
   ChooseCategory: undefined;
@@ -27,20 +19,12 @@ type MainProps = {
 };
 
 export default function IssuesScreen({ navigation }: MainProps) {
-  const user: UsersEntity | null = useSelector(
-    (state: RootState) => state.users.user
-  );
-  const [role, setRole] = useState(user?.role === "admin" ?? "");
-
-  const allIssues: IssueEntity[] = useSelector(
-    (state: RootState) => state.issue.issues
-  );
+  const [role, setRole] = useState<string | undefined>();
+  const allIssues: IssueEntity[] = useSelector((state: RootState) => state.issue.issues);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchedIssues, setSearchedIssues] = useState<IssueEntity[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const filteredIssues = useSelector(
-    (state: RootState) => state.issue.filteredIssues
-  );
+  const filteredIssues = useSelector((state: RootState) => state.issue.filteredIssues);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -53,11 +37,22 @@ export default function IssuesScreen({ navigation }: MainProps) {
     }
   }, [dispatch, selectedCategory]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userFromProfile = await dispatch(fetchUserData());
+        setRole(userFromProfile.payload.role);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleSearch = (subject: string) => {
     setSearchQuery(subject);
-    const filtered = allIssues.filter((issue) =>
-      issue.subject.toLowerCase().includes(subject.toLowerCase())
-    );
+    const filtered = allIssues.filter((issue) => issue.subject.toLowerCase().includes(subject.toLowerCase()));
     setSearchedIssues(filtered);
   };
 
@@ -79,22 +74,13 @@ export default function IssuesScreen({ navigation }: MainProps) {
 
   const renderIssueCard = (item: IssueEntity) => (
     <View key={item.id} style={styles.cardContainer}>
-      <View style={styles.imageContainer}>
-        {item.imageUrl ? (
-          <Image source={{ uri: item.imageUrl }} style={styles.image} />
-        ) : (
-          <View></View>
-        )}
-      </View>
+      <View style={styles.imageContainer}>{item.imageUrl ? <Image source={{ uri: item.imageUrl }} style={styles.image} /> : <View></View>}</View>
       <View style={styles.contentContainer}>
         <Text style={styles.h2}>{item.subject}</Text>
         <Text style={styles.text}>{item.description}</Text>
       </View>
-      {role ? (
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={() => handleDeleteIssue(item.id)}
-        >
+      {role === "admin" ? (
+        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteIssue(item.id)}>
           <Feather name="trash-2" size={24} color="white"></Feather>
         </TouchableOpacity>
       ) : (
@@ -103,11 +89,7 @@ export default function IssuesScreen({ navigation }: MainProps) {
     </View>
   );
 
-  const issues = searchQuery
-    ? searchedIssues
-    : selectedCategory
-    ? filteredIssues
-    : allIssues;
+  const issues = searchQuery ? searchedIssues : selectedCategory ? filteredIssues : allIssues;
 
   const categoryMapping: { [key: string]: string | null } = {
     All: null,
@@ -124,49 +106,18 @@ export default function IssuesScreen({ navigation }: MainProps) {
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         <View style={styles.rootContainer}>
           <View style={styles.container}>
-            <TextInput
-              style={styles.input}
-              placeholder="Search for issues"
-              value={searchQuery}
-              onChangeText={handleSearch}
-            />
+            <TextInput style={styles.input} placeholder="Search for issues" value={searchQuery} onChangeText={handleSearch} />
             <View style={styles.iconContainer}>
-              <Feather
-                name="search"
-                size={20}
-                color="black"
-                style={styles.icon}
-                onPress={() => handleSearch(searchQuery)}
-              />
+              <Feather name="search" size={20} color="black" style={styles.icon} onPress={() => handleSearch(searchQuery)} />
             </View>
           </View>
 
-          <ScrollView
-            horizontal
-            contentContainerStyle={styles.filterContainer}
-            showsHorizontalScrollIndicator={false}
-          >
+          <ScrollView horizontal contentContainerStyle={styles.filterContainer} showsHorizontalScrollIndicator={false}>
             {Object.keys(categoryMapping).map((category, index) => {
-              const isActive =
-                (category === "All" && selectedCategory === null) ||
-                category === selectedCategory;
+              const isActive = (category === "All" && selectedCategory === null) || category === selectedCategory;
               return (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.filterButton,
-                    isActive && styles.activeFilterButton,
-                  ]}
-                  onPress={() => handleFilter(category)}
-                >
-                  <Text
-                    style={[
-                      styles.filterButtonText,
-                      isActive && styles.activeFilterButton,
-                    ]}
-                  >
-                    {category}
-                  </Text>
+                <TouchableOpacity key={index} style={[styles.filterButton, isActive && styles.activeFilterButton]} onPress={() => handleFilter(category)}>
+                  <Text style={[styles.filterButtonText, isActive && styles.activeFilterButton]}>{category}</Text>
                 </TouchableOpacity>
               );
             })}
