@@ -41,49 +41,52 @@ export const signupBoard = createAsyncThunk(
   }
 );
 
-export const fetchUserData = createAsyncThunk("users/fetchUserData", async () => {
-  try {
-    // Get id from SecureStorage
-    const idString: string | null = await SecureStore.getItemAsync("id");
-    const id: number | null = idString ? JSON.parse(idString) : null;
-    // Get token
-    const token: string | null = await SecureStore.getItemAsync("token");
+export const fetchUserData = createAsyncThunk(
+  "users/fetchUserData",
+  async () => {
+    try {
+      // Get id from SecureStorage
+      const idString: string | null = await SecureStore.getItemAsync("id");
+      const id: number | null = idString ? JSON.parse(idString) : null;
+      // Get token
+      const token: string | null = await SecureStore.getItemAsync("token");
 
-    const response = await UsersAPI.fetchUserData(id, token);
-    return response;
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    throw error;
+      const response = await UsersAPI.fetchUserData(id, token);
+      return response;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      throw error;
+    }
   }
-});
+);
 
-export const updateUser = createAsyncThunk("users/updateUser", async (updatedUser: UsersEntity, thunkAPI) => {
-  try {
-    // Get id from SecureStorage
-    const idString: string | null = await SecureStore.getItemAsync("id");
-    const id: number | null = idString ? JSON.parse(idString) : null;
-    // Get token
-    const token: string | null = await SecureStore.getItemAsync("token");
-
-    const response = await UsersAPI.updateUser(id, updatedUser, token);
-
-    return response;
-  } catch (error) {
-    console.error("Error updating user data:", error);
-    throw error;
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async (updatedUser: UsersEntity) => {
+    try {
+      const response = await UsersAPI.updateUser(updatedUser.id, updatedUser);
+      console.log("This is the response form the slice", response);
+      return response;
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      throw error;
+    }
   }
-});
+);
 
-export const deleteUser = createAsyncThunk("users/deleteUser", async (id: number, thunkAPI) => {
-  try {
-    const response = await UsersAPI.deleteUser(id);
+export const deleteUser = createAsyncThunk(
+  "users/deleteUser",
+  async (id: number, thunkAPI) => {
+    try {
+      const response = await UsersAPI.deleteUser(id);
 
-    return response;
-  } catch (error) {
-    console.error("Error deleting user data:", error);
-    throw error;
+      return response;
+    } catch (error) {
+      console.error("Error deleting user data:", error);
+      throw error;
+    }
   }
-});
+);
 
 interface UsersState {
   token: string | undefined | null;

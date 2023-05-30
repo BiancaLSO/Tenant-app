@@ -80,18 +80,11 @@ export class UsersAPI {
     }
   }
 
-  static async updateUser(
-    id: number | null,
-    updatedUser: UsersEntity,
-    token: string | null
-  ) {
+  static async updateUser(id: number | undefined, updatedUser: UsersEntity) {
     const url = `http://` + this.ip + `:3000/users/${id}`;
+    console.log("updatedUser API", updatedUser, id);
     try {
-      const result = await axios.put(url, updatedUser, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const result = await axios.put(url, updatedUser);
       return result.data;
     } catch (error) {
       console.log("This error is from the UsersAPI updateUser " + error);

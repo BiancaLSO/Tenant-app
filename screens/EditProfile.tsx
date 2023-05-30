@@ -43,6 +43,7 @@ export default function EditProfile() {
     floor: 0,
     region: "",
   });
+  const [userId, setUserId] = useState(user ? user.id : 0);
 
   // validation
   const [errors, setErrors] = useState("");
@@ -71,8 +72,6 @@ export default function EditProfile() {
           floor: userFromProfile.payload.apartmentInfo.floor,
           region: userFromProfile.payload.apartmentInfo.region,
         });
-        console.log(apartmentInfo);
-        console.log(address);
       } catch (error) {
         console.log("Error fetching data:", error);
       }
@@ -97,11 +96,11 @@ export default function EditProfile() {
 
     try {
       const updatedUser: UsersEntity = {
-        username: email,
+        id: user?.id,
+        email: email,
         firstName: firstName,
         lastName: lastName,
         phone: phone,
-        role: role,
       };
       console.log("Updated user from profile", updatedUser);
       dispatch(updateUser(updatedUser));
