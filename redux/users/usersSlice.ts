@@ -41,69 +41,62 @@ export const signupBoard = createAsyncThunk(
   }
 );
 
-export const fetchUserData = createAsyncThunk(
-  "users/fetchUserData",
-  async () => {
-    try {
-      // Get id from SecureStorage
-      const idString: string | null = await SecureStore.getItemAsync("id");
-      const id: number | null = idString ? JSON.parse(idString) : null;
-      // Get token
-      const token: string | null = await SecureStore.getItemAsync("token");
+export const fetchUserData = createAsyncThunk("users/fetchUserData", async () => {
+  try {
+    // Get id from SecureStorage
+    const idString: string | null = await SecureStore.getItemAsync("id");
+    const id: number | null = idString ? JSON.parse(idString) : null;
+    // Get token
+    const token: string | null = await SecureStore.getItemAsync("token");
 
-      const response = await UsersAPI.fetchUserData(id, token);
-      return response;
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      throw error;
-    }
+    const response = await UsersAPI.fetchUserData(id, token);
+    return response;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
   }
-);
+});
 
-export const updateUser = createAsyncThunk(
-  "users/updateUser",
-  async (updatedUser: UsersEntity, thunkAPI) => {
-    try {
-      // Get id from SecureStorage
-      const idString: string | null = await SecureStore.getItemAsync("id");
-      const id: number | null = idString ? JSON.parse(idString) : null;
-      // Get token
-      const token: string | null = await SecureStore.getItemAsync("token");
+export const updateUser = createAsyncThunk("users/updateUser", async (updatedUser: UsersEntity, thunkAPI) => {
+  try {
+    // Get id from SecureStorage
+    const idString: string | null = await SecureStore.getItemAsync("id");
+    const id: number | null = idString ? JSON.parse(idString) : null;
+    // Get token
+    const token: string | null = await SecureStore.getItemAsync("token");
 
-      const response = await UsersAPI.updateUser(id, updatedUser, token);
+    const response = await UsersAPI.updateUser(id, updatedUser, token);
 
-      return response;
-    } catch (error) {
-      console.error("Error updating user data:", error);
-      throw error;
-    }
+    return response;
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    throw error;
   }
-);
+});
 
-export const deleteUser = createAsyncThunk(
-  "users/deleteUser",
-  async (id: number, thunkAPI) => {
-    try {
-      const response = await UsersAPI.deleteUser(id);
+export const deleteUser = createAsyncThunk("users/deleteUser", async (id: number, thunkAPI) => {
+  try {
+    const response = await UsersAPI.deleteUser(id);
 
-      return response;
-    } catch (error) {
-      console.error("Error deleting user data:", error);
-      throw error;
-    }
+    return response;
+  } catch (error) {
+    console.error("Error deleting user data:", error);
+    throw error;
   }
-);
+});
 
 interface UsersState {
   token: string | undefined | null;
   error: string | undefined;
   user: UsersEntity | null;
+  refresh: boolean;
 }
 
 const initialState = {
   token: null,
   error: undefined,
   user: {} as UsersEntity | null,
+  refresh: false,
 } as UsersState;
 
 // Then, handle actions in your reducers:
@@ -118,6 +111,10 @@ const usersSlice = createSlice({
     logout: (state) => {
       state.token = null;
       state.error = undefined;
+    },
+
+    setRefresh: (state, action) => {
+      state.refresh = action.payload;
     },
     // standard reducer logic, with auto-generated action types per reducer
   },
@@ -185,7 +182,7 @@ const usersSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateToken, logout } = usersSlice.actions;
+export const { updateToken, logout, setRefresh } = usersSlice.actions;
 
 export default usersSlice.reducer;
 

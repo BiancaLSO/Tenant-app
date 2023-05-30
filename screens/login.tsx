@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../store";
 import { useSelector, useDispatch } from "react-redux";
 import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, Image } from "react-native";
-import { login, logout, updateToken } from "../redux/users/usersSlice";
+import { login, logout, setRefresh, updateToken } from "../redux/users/usersSlice";
 import { UsersEntity } from "../redux/users/usersEntity";
 import * as SecureStore from "expo-secure-store";
 import { NavigationProp } from "@react-navigation/native";
 
 type RootStackParamList = {
-  Home: undefined;
+  Menu: undefined;
   Signup: undefined;
 };
 
 type MainProps = {
-  navigation: NavigationProp<RootStackParamList, "Home">;
+  navigation: NavigationProp<RootStackParamList, "Menu">;
 };
 
 export function Login({ navigation }: MainProps) {
@@ -32,7 +32,8 @@ export function Login({ navigation }: MainProps) {
 
     if (validateFields()) {
       dispatch(login(new UsersEntity(email, password)));
-      navigation.navigate("Home");
+      dispatch(setRefresh(true));
+      navigation.navigate("Menu");
     }
   };
   const validateFields = () => {
@@ -58,6 +59,7 @@ export function Login({ navigation }: MainProps) {
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync("token");
     dispatch(logout());
+    dispatch(setRefresh(false));
     console.log("You are logged out");
   };
 
