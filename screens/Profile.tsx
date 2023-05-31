@@ -100,7 +100,7 @@ export default function Profile({ navigation }: MainProps) {
         <Text style={styles.h2}>{item.subject}</Text>
         <Text style={styles.text}>{item.description}</Text>
       </View>
-      {role ? (
+      {role === "admin" ? (
         <TouchableOpacity
           style={styles.deleteButton}
           onPress={() => handleDeleteIssue(item.id)}
