@@ -31,7 +31,7 @@ export default function Profile({ navigation }: MainProps) {
     (state: RootState) => state.issue.userIssues
   );
 
-  const [role, setRole] = useState(user?.role === "admin" ?? "");
+  const [role, setRole] = useState<string | undefined>();
   const dispatch = useDispatch<AppDispatch>();
   const [userId, setUserId] = useState<number | undefined>(0);
   const [userInfo, setUserInfo] = useState({});
@@ -70,6 +70,7 @@ export default function Profile({ navigation }: MainProps) {
           region: userFromProfile.payload.apartmentInfo.region,
           street: userFromProfile.payload.apartmentInfo.street,
         });
+        setRole(userFromProfile.payload.role);
       } catch (error) {
         console.log("Error fetching data:", error);
       }
