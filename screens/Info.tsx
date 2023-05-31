@@ -2,20 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import { useGetIssues } from "../redux/info/info-hooks";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function Info() {
   const { isLoading, error, data } = useGetIssues();
 
   return (
-    <View style={styles.rootContainer}>
+    <ScrollView style={styles.rootContainer}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.h1}>Help Page</Text>
-          <Text style={styles.text}>
-            On this page you can find the answers to different administration
-            questions and helping articles. If your answer is not here please
-            contact us by calling our office or at administration@email.com
-          </Text>
+          <Text style={styles.text}>On this page you can find the answers to different administration questions and helping articles. If your answer is not here please contact us by calling our office or at administration@email.com</Text>
         </View>
         {data ? (
           data.map((item: any) => (
@@ -28,7 +25,7 @@ export default function Info() {
           <></>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
