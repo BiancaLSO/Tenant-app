@@ -11,7 +11,7 @@ export const useGetIssues = () => {
   };
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["issues"],
+    queryKey: ["infos"],
     queryFn: fetchInfo,
   });
   return { isLoading, isError, data: data?.data, error };
